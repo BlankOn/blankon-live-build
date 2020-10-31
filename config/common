@@ -43,7 +43,7 @@ LB_DEBCONF_FRONTEND="noninteractive"
 LB_DEBCONF_PRIORITY="critical"
 
 # Set initramfs hook
-LB_INITRAMFS="none"
+LB_INITRAMFS="live-boot"
 
 # Set initramfs compression
 LB_INITRAMFS_COMPRESSION="gzip"
@@ -52,7 +52,7 @@ LB_INITRAMFS_COMPRESSION="gzip"
 LB_INITSYSTEM="systemd"
 
 # Set distribution mode
-LB_MODE="blankon"
+LB_MODE="debian"
 
 # Set system type
 LB_SYSTEM="live"
@@ -61,10 +61,10 @@ LB_SYSTEM="live"
 LB_IMAGE_NAME="live-image"
 
 # Set options to use with apt
-APT_OPTIONS="--yes"
+APT_OPTIONS="--yes -o Acquire::Retries=5"
 
 # Set options to use with aptitude
-APTITUDE_OPTIONS="--assume-yes"
+APTITUDE_OPTIONS="--assume-yes -o Acquire::Retries=5"
 
 # Set options to use with debootstrap
 DEBOOTSTRAP_OPTIONS=""

@@ -4,19 +4,19 @@
 LB_IMAGE_TYPE="iso-hybrid"
 
 # Set image filesystem
-LB_BINARY_FILESYSTEM="fat16"
+LB_BINARY_FILESYSTEM="fat32"
 
 # Set apt/aptitude generic indices
 LB_APT_INDICES="true"
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE="quiet splash"
+LB_BOOTAPPEND_LIVE="boot=live components quiet splash"
 
 # Set boot parameters
 LB_BOOTAPPEND_INSTALL=""
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE_FAILSAFE="memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788"
+LB_BOOTAPPEND_LIVE_FAILSAFE="boot=live components memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788"
 
 # Set BIOS bootloader
 LB_BOOTLOADER_BIOS="syslinux"
@@ -28,7 +28,7 @@ LB_BOOTLOADER_EFI="grub-efi"
 LB_CHECKSUMS="sha256"
 
 # Set compression
-LB_COMPRESSION="xz"
+LB_COMPRESSION="none"
 
 # Set zsync
 LB_ZSYNC="true"
@@ -47,34 +47,34 @@ LB_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
 LB_DEBIAN_INSTALLER_PRESEEDFILE=""
 
 # Toggle use of GUI debian-installer
-LB_DEBIAN_INSTALLER_GUI="false"
+LB_DEBIAN_INSTALLER_GUI="true"
 
 # Set hdd label
-LB_HDD_LABEL="BLANKON"
+LB_HDD_LABEL="DEBIAN_LIVE"
 
 # Set hdd filesystem size
-LB_HDD_SIZE="10000"
+LB_HDD_SIZE="auto"
 
 # Set start of partition for the hdd target for BIOSes that expect a specific boot partition start (e.g. "63s"). If empty, use optimal layout.
 LB_HDD_PARTITION_START=""
 
 # Set iso author
-LB_ISO_APPLICATION="Ubuntu Live"
+LB_ISO_APPLICATION="BlankOn Live"
 
 # Set iso preparer
-LB_ISO_PREPARER="live-build 20191222+salsaci; http://packages.qa.debian.org/live-build"
+LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/live-build"
 
 # Set iso publisher
-LB_ISO_PUBLISHER="Debian Live project; http://live.debian.net/; debian-live@lists.debian.org"
+LB_ISO_PUBLISHER="BlankOn Live project; https://dev.blankonlinux.or.id"
 
 # Set iso volume (max 32 chars)
-LB_ISO_VOLUME="Ubuntu verbeek 20201030-19:56"
+LB_ISO_VOLUME="BlankOn verbeek 20201031-18:55"
 
 # Set jffs2 eraseblock size
 LB_JFFS2_ERASEBLOCK=""
 
 # Set memtest
-LB_MEMTEST="memtest86+"
+LB_MEMTEST="none"
 
 # Set loadlin
 LB_LOADLIN="false"
@@ -92,10 +92,10 @@ LB_ONIE="false"
 LB_ONIE_KERNEL_CMDLINE=""
 
 # Set inclusion of firmware packages in debian-installer
-LB_FIRMWARE_BINARY="false"
+LB_FIRMWARE_BINARY="true"
 
 # Set inclusion of firmware packages in the live image
-LB_FIRMWARE_CHROOT="false"
+LB_FIRMWARE_CHROOT="true"
 
 # Set swap file path
 LB_SWAP_FILE_PATH=""

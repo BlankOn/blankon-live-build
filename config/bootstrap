@@ -7,7 +7,7 @@ LB_ARCHITECTURE="amd64"
 LB_DISTRIBUTION="verbeek"
 
 # Select parent distribution to use
-LB_PARENT_DISTRIBUTION="verbeek"
+LB_PARENT_DISTRIBUTION=""
 
 # Select distribution to use in the chroot
 LB_DISTRIBUTION_CHROOT="verbeek"
@@ -25,10 +25,10 @@ LB_PARENT_DISTRIBUTION_BINARY="verbeek"
 LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
 
 # Select archive areas to use
-LB_ARCHIVE_AREAS="main restricted"
+LB_ARCHIVE_AREAS="main"
 
 # Select parent archive areas to use
-LB_PARENT_ARCHIVE_AREAS="main restricted"
+LB_PARENT_ARCHIVE_AREAS="main"
 
 # Set parent mirror to bootstrap from
 LB_PARENT_MIRROR_BOOTSTRAP="http://rani.blankonlinux.or.id:8082/dev/"

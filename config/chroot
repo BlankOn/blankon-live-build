@@ -10,13 +10,13 @@ LB_CHROOT_SQUASHFS_COMPRESSION_LEVEL=""
 LB_CHROOT_SQUASHFS_COMPRESSION_TYPE=""
 
 # Set union filesystem
-LB_UNION_FILESYSTEM="aufs"
+LB_UNION_FILESYSTEM="overlay"
 
 # Set interactive build
 LB_INTERACTIVE="false"
 
 # Set keyring packages
-LB_KEYRING_PACKAGES="blankon-keyring"
+LB_KEYRING_PACKAGES="debian-archive-keyring"
 
 # Set kernel flavour to use (with arch)
 LB_LINUX_FLAVOURS_WITH_ARCH="amd64"
@@ -25,10 +25,10 @@ LB_LINUX_FLAVOURS_WITH_ARCH="amd64"
 LB_LINUX_PACKAGES="linux-image"
 
 # Enable security updates
-LB_SECURITY="true"
+LB_SECURITY="false"
 
 # Enable updates updates
-LB_UPDATES="true"
+LB_UPDATES="false"
 
 # Enable backports updates
 LB_BACKPORTS="false"

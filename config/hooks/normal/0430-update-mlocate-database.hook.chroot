@@ -1,1 +1,14 @@
-/usr/share/live/build/hooks/normal/0430-update-mlocate-database.hook.chroot
+#!/bin/sh
+
+set -e
+
+# Update the mlocate database.
+#
+# It is convenient for this to be already up to date on the live system, and it
+# means that if the live system is later installed to a hard disk then less
+# work will be required after installation.
+
+if command -v updatedb.mlocate >/dev/null
+then
+	updatedb.mlocate
+fi
