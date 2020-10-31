@@ -17,4 +17,4 @@ There is `build.sh` script that could be used to export the result to BlankOn's 
 
 ## TODO
 
-Notification to blankon-dev mailing list (need SMTP server) and telegram group.
+Notification to blankon-dev mailing list (need SMTP server).
