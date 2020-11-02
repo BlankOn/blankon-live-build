@@ -9,13 +9,14 @@ References:
 
 ## Prerequisites and preparation
 
-Need live-build version **20191222**
+Need live-build version **20191222** or commit sha on `7360d50fa6b`
 
 ### Install tools:
 ```
 sudo apt install debootstrap make git
 git clone https://salsa.debian.org/live-team/live-build.git debian-live-build
 cd debian-live-build
+git checkout 7360d50fa6b
 sudo make install
 sudo lb --version
 ```
