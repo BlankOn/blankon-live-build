@@ -1,0 +1,13 @@
+[Unit]
+Description=isoworker
+
+[Service]
+User=piko
+WorkingDirectory=/path/to/blankon-live-build
+ExecStart=/path/to/blankon-live-build/worker.sh
+ExecStop=/bin/kill -9 $MAINPID
+StandardOutput=file:/var/log/isoworker.log
+StandardError=file:/var/log/isoworker.log
+
+[Install]
+WantedBy=multi-user.target
