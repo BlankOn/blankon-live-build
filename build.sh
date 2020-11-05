@@ -1,9 +1,9 @@
 #!/bin/bash
 
 TELEGRAM_BOT_KEY=""
-## Custom message
-RESULT="telah terbit"
-ACTION="Berkas citra dapat diunduh"
+## Default messages
+RESULT="gagal terbit"
+ACTION="Log build dapat disimak"
 
 ## Args
 REPO=$1
@@ -46,12 +46,10 @@ sudo lb config
 sudo lb build | tee -a live-image-amd64.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
-RETVAL=1
 BUILD_RESULT=$(tail -n 1 live-image-amd64.build.log)
 if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
-  RESULT="gagal terbit"
-  ACTION="Log build dapat disimak"
-  RETVAL=0
+  RESULT="telah terbit"
+  ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
   cp -v live-image-amd64.contents $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.contents
   cp -v live-image-amd64.files $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.files
