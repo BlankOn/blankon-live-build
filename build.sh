@@ -69,4 +69,4 @@ popd
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3)
 sudo rm -rf ./tmp
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001323649228\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT $RESULT. $ACTION di https://cdimage.blankonlinux.or.id/blankon/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001323649228\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di https://cdimage.blankonlinux.or.id/blankon/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
