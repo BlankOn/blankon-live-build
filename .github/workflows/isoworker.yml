@@ -1,0 +1,28 @@
+name: BlankOn Live Build
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  tendang:
+    name: Tendang isoworker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set VALUE for !Pull Request
+        if: ${{ github.event_name != 'pull_request' }}
+        shell: bash
+        run: echo "VALUE=${{ github.repository_owner }}_${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+      - name: Set VALUE for Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: echo "VALUE=${{ github.actor }}_${{ github.head_ref }}" >> $GITHUB_ENV
+      - name: Trigger tendang
+        env:
+          TENDANG_TOKEN: ${{ secrets.LB_TENDANG_TOKEN }}
+        run: |
+          curl --header "Content-Type: application/json" \
+            --request POST \
+            --data "{\"name\":\"isoworker\",\"value\":\""$VALUE"\", \"token\": \""$TENDANG_TOKEN"\"}" \
+            https://tendang.blankonlinux.or.id --fail
