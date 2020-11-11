@@ -25,4 +25,4 @@ jobs:
           curl --header "Content-Type: application/json" \
             --request POST \
             --data "{\"name\":\"isoworker\",\"value\":\""$VALUE"\", \"token\": \""$TENDANG_TOKEN"\"}" \
-            https://tendang.blankonlinux.or.id
+            https://tendang.blankonlinux.or.id --fail
