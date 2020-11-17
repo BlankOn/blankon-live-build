@@ -16,7 +16,7 @@ LB_UNION_FILESYSTEM="overlay"
 LB_INTERACTIVE="false"
 
 # Set keyring packages
-LB_KEYRING_PACKAGES="debian-archive-keyring"
+LB_KEYRING_PACKAGES="blankon-keyring"
 
 # Set kernel flavour to use (with arch)
 LB_LINUX_FLAVOURS_WITH_ARCH="amd64"
