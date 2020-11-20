@@ -57,6 +57,9 @@ if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
   cp -v live-image-amd64.packages $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.packages
   cp -v live-image-amd64.hybrid.iso $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.hybrid.iso
   sha256sum $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.hybrid.iso > $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.hybrid.iso.sha256sum
+  rm $JAHITAN_PATH/current
+  ln -s $TARGET_DIR $JAHITAN_PATH/current
+  echo "$TODAY-$TODAY_COUNT" > $JAHITAN_PATH/current/current.txt
 fi
 
 cp -v live-image-amd64.build.log $TARGET_DIR/$TODAY-$TODAY_COUNT-live-image-amd64.build.log.txt
