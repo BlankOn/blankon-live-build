@@ -52,7 +52,7 @@ LB_INITRAMFS_COMPRESSION="gzip"
 LB_INITSYSTEM="systemd"
 
 # Set distribution mode
-LB_MODE="debian"
+LB_MODE="blankon"
 
 # Set system type
 LB_SYSTEM="live"
