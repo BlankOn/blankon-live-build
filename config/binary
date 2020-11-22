@@ -47,10 +47,10 @@ LB_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
 LB_DEBIAN_INSTALLER_PRESEEDFILE=""
 
 # Toggle use of GUI debian-installer
-LB_DEBIAN_INSTALLER_GUI="true"
+LB_DEBIAN_INSTALLER_GUI="false"
 
 # Set hdd label
-LB_HDD_LABEL="DEBIAN_LIVE"
+LB_HDD_LABEL="BLANKON_LIVE"
 
 # Set hdd filesystem size
 LB_HDD_SIZE="auto"
