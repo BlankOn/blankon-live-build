@@ -4,3 +4,12 @@ live-config-systemd
 calamares
 calamares-settings-debian
 gnome
+build-essential
+vim
+netcat
+gpg
+pbuilder
+debootstrap
+devscripts
+debhelper
+curl
