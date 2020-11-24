@@ -3,4 +3,4 @@ live-config
 live-config-systemd
 calamares
 calamares-settings-debian
-xfce4
+gnome
