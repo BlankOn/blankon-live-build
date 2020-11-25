@@ -13,7 +13,7 @@ jobs:
       - name: Set VALUE for !Pull Request
         if: ${{ github.event_name != 'pull_request' }}
         shell: bash
-        run: echo "VALUE=${{ github.repository_owner }}_${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: echo "VALUE=blankon_${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
       - name: Set VALUE for Pull Request
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
