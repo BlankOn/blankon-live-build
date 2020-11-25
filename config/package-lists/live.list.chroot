@@ -1,7 +1,6 @@
 live-boot
 live-config
 live-config-systemd
-blankon-keyring
 calamares
 calamares-settings-debian
 gnome
