@@ -58,7 +58,7 @@ LB_MODE="blankon"
 LB_SYSTEM="live"
 
 # Set base name of the image
-LB_IMAGE_NAME="live-image"
+LB_IMAGE_NAME="blankon-live-image"
 
 # Set options to use with apt
 APT_OPTIONS="--yes -o Acquire::Retries=5"
