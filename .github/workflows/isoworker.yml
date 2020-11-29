@@ -17,7 +17,7 @@ jobs:
       - name: Set VALUE for Pull Request
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
-        run: echo "VALUE=${{ github.actor }}_${{ github.head_ref }}" >> $GITHUB_ENV
+        run: echo "VALUE=blankon_${{ github.head_ref }}" >> $GITHUB_ENV
       - name: Trigger tendang
         env:
           TENDANG_TOKEN: ${{ secrets.LB_TENDANG_TOKEN }}
