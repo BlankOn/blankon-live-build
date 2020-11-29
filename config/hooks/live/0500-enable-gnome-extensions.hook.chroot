@@ -13,8 +13,10 @@ echo "system-db:local" >> /etc/dconf/profile/user
 
 mkdir -p /etc/dconf/db/local.d
 touch /etc/dconf/db/local.d/00-extensions || true
-cat <<EOF >> /etc/dconf/db/local.d/00-extensions
+cat <<EOF > /etc/dconf/db/local.d/00-extensions
 [org/gnome/shell]
 # List all extensions that you want to have enabled for all users
 enabled-extensions=['pop-shell@system76.com']
 EOF
+
+dconf update
