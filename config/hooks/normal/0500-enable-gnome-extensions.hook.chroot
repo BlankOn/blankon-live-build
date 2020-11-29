@@ -1,0 +1,20 @@
+#!/bin/sh
+
+
+set -e
+
+# Enable GNOME extensions
+# Reference: https://people.gnome.org/~pmkovar/system-admin-guide/extensions-enable.html
+
+mkdir -p /etc/dconf/profile
+touch /etc/dconf/profile/user || true
+echo "user-db:user" > /etc/dconf/profile/user
+echo "system-db:local" >> /etc/dconf/profile/user
+
+mkdir -p /etc/dconf/db/local.d
+touch /etc/dconf/db/local.d/00-extensions || true
+cat <<EOF >> /etc/dconf/db/local.d/00-extensions
+[org/gnome/shell]
+# List all extensions that you want to have enabled for all users
+enabled-extensions=['pop-shell@system76.com']
+EOF

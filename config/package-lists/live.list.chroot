@@ -5,6 +5,7 @@ blankon-keyring
 calamares
 calamares-settings-debian
 gnome
+pop-shell
 build-essential
 vim
 netcat
