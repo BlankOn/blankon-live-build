@@ -14,4 +14,3 @@ debootstrap
 devscripts
 debhelper
 curl
-virtualbox-guest-x11
