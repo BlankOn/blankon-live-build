@@ -53,7 +53,11 @@ sudo lb --version
    error 1 NOCOMMON "File not found: debian-common"
   fi
   ```
-
+- Create symlink in host files to satisfy udeb packages (?) [see this issue](https://github.com/BlankOn/Verbeek/issues/134). 
+  (no need symlink if using docker for building images)
+  ```
+  sudo ln -s /usr/share/live/build/data/debian-cd/squeeze /usr/share/live/build/data/debian-cd/verbeek
+  ```
 ## Build
 
 - `sudo lb clean --purge`
@@ -66,6 +70,25 @@ Simple way
 ```
 bash build.sh
 ```
+
+## Using Docker for build
+**On host:** 
+- `docker build -t blankon-live-build:verbeek .`
+- `docker run --rm -ti --cap-add sys_admin -v $(pwd):/src blankon-live-build:verbeek bash`
+**Inside docker container:** 
+- `lb clean`
+- `lb config`
+- `lb build`
+
+
+## Troubleshooting
+- ```
+  P: Begin installing local package lists...
+  E: You need to install apt-utils on your host system.
+  E: An unexpected failure occurred, exiting...
+  P: Begin unmounting filesystems...
+  ```
+  Solution: `apt install apt-utils` inside your host or docker container
 
 ## TODO
 
