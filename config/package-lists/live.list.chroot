@@ -6,6 +6,7 @@ calamares-settings-blankon
 gnome
 pop-shell
 build-essential
+core-utils
 vim
 netcat
 gpg
@@ -14,3 +15,11 @@ debootstrap
 devscripts
 debhelper
 curl
+git
+jq
+netcat
+nmap
+network-manager-pptp-gnome
+network-manager-l2tp-gnome
+network-manager-openvpn-gnome
+
