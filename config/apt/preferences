@@ -1,0 +1,7 @@
+Package: termit
+Pin: version *
+Pin-Priority: -1
+
+Package: firefox-esr
+Pin: version *
+Pin-Priority: -1
