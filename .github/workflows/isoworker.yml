@@ -4,6 +4,8 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  schedule:
+    - cron: '0 9 * * *'
 
 jobs:
   tendang:
@@ -14,10 +16,17 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         shell: bash
         run: echo "VALUE=${{ github.repository_owner }}_${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
       - name: Set VALUE for Pull Request
         if: ${{ github.event_name == 'pull_request' }}
         shell: bash
         run: echo "VALUE=blankon_${{ github.head_ref }}" >> $GITHUB_ENV
+
+      - name: Set VALUE for Schedule
+        if: ${{ github.event_name == 'schedule' }}
+        shell: bash
+        run: echo "VALUE=blankon_master" >> $GITHUB_ENV
+
       - name: Trigger tendang
         env:
           TENDANG_TOKEN: ${{ secrets.LB_TENDANG_TOKEN }}
@@ -26,3 +35,4 @@ jobs:
             --request POST \
             --data "{\"name\":\"isoworker\",\"value\":\""$VALUE"\", \"token\": \""$TENDANG_TOKEN"\"}" \
             https://tendang.blankonlinux.or.id --fail
+
