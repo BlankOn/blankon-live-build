@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+mkdir -p /etc/dconf/profile
+touch /etc/dconf/profile/user || true
+echo "user-db:user" > /etc/dconf/profile/user
+echo "system-db:local" >> /etc/dconf/profile/user
+
+mkdir -p /etc/dconf/db/local.d
+touch /etc/dconf/db/local.d/00-wallpaper || true
+cat <<EOF > /etc/dconf/db/local.d/00-wallpaper
+[org/gnome/desktop/background]
+picture-uri='file:///usr/share/backgrounds/blankon/Boni Repair.png'
+EOF
+
+dconf update
