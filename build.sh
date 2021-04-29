@@ -54,9 +54,6 @@ sudo lb build | tee -a blankon-live-image-amd64.build.log
 ## Live build does not return accurate exit code. Let's determine it from the log.
 BUILD_RESULT=$(tail -n 1 blankon-live-image-amd64.build.log)
 if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
-  # Fix zsync URL
-  sed -i 's/URL: blankon-live-image-amd64.hybrid.iso/URL: http:\/\/cdimage.blankonlinux.or.id\/blankon\/jahitan-harian\/current\/blankon-live-image-amd64.hybrid.iso/g' blankon-live-image-amd64.hybrid.iso.zsync
-
   RESULT="telah terbit"
   ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
