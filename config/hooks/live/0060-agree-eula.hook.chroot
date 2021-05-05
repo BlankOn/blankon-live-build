@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+echo firmware-ipw2x00 firmware-ipw2x00/accepted-firmware-ipw2x00-eula select true | debconf-set-selections
+echo firmware-ivtv firmware-ivtv/accepted-firmware-ivtv-eula select true | debconf-set-selections
