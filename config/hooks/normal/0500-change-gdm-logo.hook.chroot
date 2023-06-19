@@ -1,5 +1,0 @@
-#!/bin/sh
-
-set -e 
-
-sed -i "s|logo='/usr/share/images/vendor-logos/logo-text-version-64.png'|logo='/usr/share/images/blankon-text-white.png'|g" /etc/gdm3/greeter.dconf-defaults
