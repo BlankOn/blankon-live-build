@@ -11,7 +11,7 @@ References:
 
 ## Prerequisites and preparation
 
-Need live-build version **20191222** or commit sha on `7360d50fa6b`
+Need live-build version **20230502** or commit sha on `dd916ac5be9428ff79a28fb6343f5d244acca438`
 
 ### Install tools:
 ```
