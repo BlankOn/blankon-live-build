@@ -48,7 +48,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 
 ## Build
 sudo lb clean
-sudo lb config --bootstrap-keyring blankon-archive-keyring --keyring-packages blankon-archive-keyring
+sudo lb config --keyring-packages blankon-archive-keyring
 sudo lb build | tee -a blankon-live-image-amd64.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
