@@ -6,10 +6,7 @@ LB_CONFIGURATION_VERSION="20191222"
 # Set package manager
 LB_APT="apt"
 
-# Set apt/aptitude ftp proxy
-LB_APT_FTP_PROXY=""
-
-# Set apt/aptitude http proxy
+# Set proxy for HTTP connections
 LB_APT_HTTP_PROXY=""
 
 # Set apt/aptitude pipeline depth
@@ -67,13 +64,13 @@ APT_OPTIONS="--yes -o Acquire::Retries=5"
 APTITUDE_OPTIONS="--assume-yes -o Acquire::Retries=5"
 
 # Set options to use with debootstrap
-DEBOOTSTRAP_OPTIONS=""
+DEBOOTSTRAP_OPTIONS="--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
 
 # Set script to use with debootstrap
 DEBOOTSTRAP_SCRIPT=""
 
 # Set options to use with gzip
-GZIP_OPTIONS="-6  --rsyncable"
+GZIP_OPTIONS="-6 --rsyncable"
 
 # Enable UTC timestamps
 LB_UTC_TIME="false"
