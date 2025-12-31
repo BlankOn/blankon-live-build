@@ -48,7 +48,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 
 ## Build
 sudo lb clean
-sudo lb config --keyring-packages blankon-archive-keyring --debootstrap-options "--include=usrmerge --keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
+sudo lb config --keyring-packages blankon-archive-keyring --debootstrap-options "--exclude=usr-is-merged --keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
 sudo lb build | tee -a blankon-live-image-amd64.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
