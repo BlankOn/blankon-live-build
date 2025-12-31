@@ -31,40 +31,40 @@ LB_ARCHIVE_AREAS="main extras restricted"
 LB_PARENT_ARCHIVE_AREAS="main"
 
 # Set parent mirror to bootstrap from
-LB_PARENT_MIRROR_BOOTSTRAP="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_BOOTSTRAP="http://100.71.100.14/dev/"
 
 # Set parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_CHROOT="http://100.71.100.14/dev/"
 
 # Set security parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT_SECURITY="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_CHROOT_SECURITY="http://100.71.100.14/dev/"
 
 # Set parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_BINARY="http://100.71.100.14/dev/"
 
 # Set security parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY_SECURITY="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_BINARY_SECURITY="http://100.71.100.14/dev/"
 
 # Set debian-installer parent mirror
-LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://100.71.100.14:8082/dev/"
+LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://100.71.100.14/dev/"
 
 # Set mirror to bootstrap from
-LB_MIRROR_BOOTSTRAP="http://100.71.100.14:8082/dev/"
+LB_MIRROR_BOOTSTRAP="http://100.71.100.14/dev/"
 
 # Set mirror to fetch packages from
-LB_MIRROR_CHROOT="http://100.71.100.14:8082/dev/"
+LB_MIRROR_CHROOT="http://100.71.100.14/dev/"
 
 # Set security mirror to fetch packages from
-LB_MIRROR_CHROOT_SECURITY="http://100.71.100.14:8082/dev/"
+LB_MIRROR_CHROOT_SECURITY="http://100.71.100.14/dev/"
 
 # Set mirror which ends up in the image
-LB_MIRROR_BINARY="http://100.71.100.14:8082/dev/"
+LB_MIRROR_BINARY="http://100.71.100.14/dev/"
 
 # Set security mirror which ends up in the image
-LB_MIRROR_BINARY_SECURITY="http://100.71.100.14:8082/dev/"
+LB_MIRROR_BINARY_SECURITY="http://100.71.100.14/dev/"
 
 # Set debian-installer mirror
-LB_MIRROR_DEBIAN_INSTALLER="http://100.71.100.14:8082/dev/"
+LB_MIRROR_DEBIAN_INSTALLER="http://100.71.100.14/dev/"
 
 # Set architectures to use foreign bootstrap
 LB_BOOTSTRAP_QEMU_ARCHITECTURE=""
