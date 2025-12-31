@@ -1,3 +1,1 @@
-deb http://100.71.100.14/dev verbeek main
-deb http://100.71.100.14/dev verbeek restricted 
-deb http://100.71.100.14/dev verbeek extras 
+deb http://100.71.100.14/dev verbeek main restricted extras
