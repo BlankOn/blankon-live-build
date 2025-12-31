@@ -1,1 +1,3 @@
-deb http://100.71.100.14/dev verbeek main restricted extras
+#deb http://100.71.100.14/dev verbeek main restricted extras
+
+deb http://kartolo.sby.datautama.net.id/debian sid main non-free contrib
