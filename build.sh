@@ -28,7 +28,7 @@ fi
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
-JAHITAN_PATH=/mnt/cdimage/images/jahitan-harian
+JAHITAN_PATH=/tmp/jahitan-harian
 ARCH=amd64
 TODAY=$(date '+%Y%m%d')
 TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
@@ -48,7 +48,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 
 ## Build
 sudo lb clean
-sudo lb config --keyring-packages blankon-archive-keyring --debootstrap-options "--exclude=usrmerge,usr-is-merged --keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
+sudo lb config --keyring-packages blankon-keyring --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
 sudo lb build | tee -a blankon-live-image-amd64.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
