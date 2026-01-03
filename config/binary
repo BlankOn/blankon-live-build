@@ -65,7 +65,7 @@ LB_ISO_APPLICATION="BlankOn Live"
 LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/live-build"
 
 # Set iso publisher
-LB_ISO_PUBLISHER="BlankOn Live project; https://dev.blankonlinux.or.id"
+LB_ISO_PUBLISHER="BlankOn Revival Project; https://blankon.github.io"
 
 # Set iso volume (max 32 chars)
 LB_ISO_VOLUME="BlankOn verbeek 20201031-18:55"

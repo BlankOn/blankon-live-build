@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cat > /etc/os-release << 'EOF'
+NAME="BlankOn Linux"
+VERSION="12.0 (Verbeek)"
+ID=blankon
+ID_LIKE=debian
+PRETTY_NAME="BlankOn Linux 12.0 Verbeek"
+VERSION_ID="12.0"
+VERSION_CODENAME=verbeek
+HOME_URL="https://blankon.github.io"
+SUPPORT_URL="https://github.com/blankon/verbeek/issues"
+BUG_REPORT_URL="https://github.com/blankon/verbeek/issues"
+EOF
+
+# Update the symbolic link
+ln -sf /etc/os-release /usr/lib/os-release
