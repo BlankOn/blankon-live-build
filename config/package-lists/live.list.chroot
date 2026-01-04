@@ -6,5 +6,9 @@ gnome-core
 vim
 firefox
 curl
+jq
+wget
+htop
+gparted
 calamares
 calamares-settings
