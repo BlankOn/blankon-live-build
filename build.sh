@@ -28,7 +28,7 @@ fi
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
-JAHITAN_PATH=~/jahitan-harian
+JAHITAN_PATH=/home/user/jahitan-harian
 ARCH=amd64
 TODAY=$(date '+%Y%m%d')
 TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
@@ -78,4 +78,4 @@ cp -v blankon-live-image-amd64.build.log $TARGET_DIR/blankon-live-image-amd64.bu
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di https://blankonlinux.id/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari blankon-live-build cabang $BRANCH $RESULT. $ACTION di http://blankonlinux.id/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
