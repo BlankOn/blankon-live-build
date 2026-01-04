@@ -12,6 +12,3 @@ HOME_URL="https://blankon.github.io"
 SUPPORT_URL="https://github.com/blankon/verbeek/issues"
 BUG_REPORT_URL="https://github.com/blankon/verbeek/issues"
 EOF
-
-# Update the symbolic link
-ln -sf /etc/os-release /usr/lib/os-release
