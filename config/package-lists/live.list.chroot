@@ -10,5 +10,6 @@ jq
 wget
 htop
 gparted
+gedit
 calamares
 calamares-settings
