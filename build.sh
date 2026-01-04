@@ -2,7 +2,7 @@
 
 TELEGRAM_BOT_KEY=""
 ## Default messages
-RESULT="gagal terbit"
+RESULT="gagal terbit ❌"
 ACTION="Log build dapat disimak"
 
 ## Args
@@ -54,7 +54,7 @@ sudo lb build | tee -a blankon-live-image-amd64.build.log
 ## Live build does not return accurate exit code. Let's determine it from the log.
 BUILD_RESULT=$(tail -n 1 blankon-live-image-amd64.build.log)
 if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
-  RESULT="telah terbit"
+  RESULT="telah terbit ✅"
   ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
   cp -v blankon-live-image-amd64.contents $TARGET_DIR/blankon-live-image-amd64.contents
@@ -78,4 +78,4 @@ cp -v blankon-live-image-amd64.build.log $TARGET_DIR/blankon-live-image-amd64.bu
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di https://cdimage.blankonlinux.or.id/blankon/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di https://blankonlinux.id/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
