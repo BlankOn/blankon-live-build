@@ -14,7 +14,7 @@ COMMIT=$3
 START=$(date +%s)
 
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
-sudo rm -rf ./tmp || true
+sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
 
 ## Skip further steps if this is a build in local computer
 if [ -z "$REPO" ] || [ -z "$BRANCH" ]
@@ -28,7 +28,7 @@ fi
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
-JAHITAN_PATH=/home/user/jahitan-harian
+JAHITAN_PATH=~/jahitan-harian
 ARCH=amd64
 TODAY=$(date '+%Y%m%d')
 TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
@@ -48,7 +48,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 
 ## Build
 sudo lb clean
-sudo lb config --keyring-packages blankon-keyring --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
+sudo lb config
 sudo lb build | tee -a blankon-live-image-amd64.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
@@ -78,4 +78,4 @@ cp -v blankon-live-image-amd64.build.log $TARGET_DIR/blankon-live-image-amd64.bu
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di http://blankonlinux.id/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari $REPO cabang $BRANCH $RESULT. $ACTION di https://cdimage.blankonlinux.or.id/blankon/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
