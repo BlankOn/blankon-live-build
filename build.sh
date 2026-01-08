@@ -1,6 +1,15 @@
 #!/bin/bash
 
-TELEGRAM_BOT_KEY=""
+# Load configuration from .env file
+if [ -f .env ]; then
+  source .env
+fi
+
+if [ -z "$TELEGRAM_BOT_KEY" ]; then
+  echo "Error: TELEGRAM_BOT_KEY is missing. Please check your .env file."
+  exit 1
+fi
+
 ## Default messages
 RESULT="gagal terbit ❌"
 ACTION="Log build dapat disimak"
@@ -8,8 +17,10 @@ ACTION="Log build dapat disimak"
 ## Args
 REPO=$1
 BRANCH=$2
+REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|')
 # Optional
 COMMIT=$3
+ARCH=amd64
 
 START=$(date +%s)
 
@@ -20,8 +31,8 @@ sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
 if [ -z "$REPO" ] || [ -z "$BRANCH" ]
 then
   sudo lb clean --purge
-  sudo lb config
-  sudo time lb build | sudo tee -a blankon-live-image-amd64.build.log
+  sudo lb config --architectures $ARCH
+  sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
 fi
 
@@ -29,7 +40,6 @@ echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
 JAHITAN_PATH=/home/user/jahitan-harian
-ARCH=amd64
 TODAY=$(date '+%Y%m%d')
 TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
 TODAY_COUNT=$(($TODAY_COUNT + 1))
@@ -41,6 +51,13 @@ sudo chmod -R a+rw tmp
 
 ## Preparation
 git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT
+
+# If a specific commit was passed, switch to it.
+# If not, stay on the latest code from the branch.
+if [ -n "$COMMIT" ]; then
+     git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
+fi
+COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
 mkdir -p ./tmp/$TODAY-$TODAY_COUNT
 sudo rm -rf config
 cp -vR ./tmp/$TODAY-$TODAY_COUNT/config config
@@ -48,21 +65,21 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 
 ## Build
 sudo lb clean
-sudo lb config
-sudo lb build | tee -a blankon-live-image-amd64.build.log
+sudo lb config --architectures $ARCH
+sudo lb build | tee -a blankon-live-image-$ARCH.build.log
 
 ## Live build does not return accurate exit code. Let's determine it from the log.
-BUILD_RESULT=$(tail -n 1 blankon-live-image-amd64.build.log)
+BUILD_RESULT=$(tail -n 1 blankon-live-image-$ARCH.build.log)
 if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
   RESULT="telah terbit ✅"
   ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
-  cp -v blankon-live-image-amd64.contents $TARGET_DIR/blankon-live-image-amd64.contents
-  cp -v blankon-live-image-amd64.files $TARGET_DIR/blankon-live-image-amd64.files
-  cp -v blankon-live-image-amd64.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-amd64.hybrid.iso.zsync
-  cp -v blankon-live-image-amd64.packages $TARGET_DIR/blankon-live-image-amd64.packages
-  cp -v blankon-live-image-amd64.hybrid.iso $TARGET_DIR/blankon-live-image-amd64.hybrid.iso
-  sha256sum $TARGET_DIR/blankon-live-image-amd64.hybrid.iso > $TARGET_DIR/blankon-live-image-amd64.hybrid.iso.sha256sum
+  cp -v blankon-live-image-$ARCH.contents $TARGET_DIR/blankon-live-image-$ARCH.contents
+  cp -v blankon-live-image-$ARCH.files $TARGET_DIR/blankon-live-image-$ARCH.files
+  cp -v blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync
+  cp -v blankon-live-image-$ARCH.packages $TARGET_DIR/blankon-live-image-$ARCH.packages
+  cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
+  sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
   rm $JAHITAN_PATH/current
   ln -s $TARGET_DIR $JAHITAN_PATH/current
   echo "$TODAY-$TODAY_COUNT" > $JAHITAN_PATH/current/current.txt
@@ -72,10 +89,11 @@ END=$(date +%s)
 DURATION=$((END - START))
 TOTAL_DURATION="Done in $(date -d@$DURATION -u +%H:%M:%S)."
 echo $TOTAL_DURATION
-echo $TOTAL_DURATION >> blankon-live-image-amd64.build.log
-cp -v blankon-live-image-amd64.build.log $TARGET_DIR/blankon-live-image-amd64.build.log.txt
+echo $TOTAL_DURATION >> blankon-live-image-$ARCH.build.log
+tail -n 100 blankon-live-image-$ARCH.build.log > $TARGET_DIR/blankon-live-image-$ARCH.tail100.build.log.txt
+cp -v blankon-live-image-$ARCH.build.log $TARGET_DIR/blankon-live-image-$ARCH.build.log.txt
 
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT dari blankon-live-build cabang $BRANCH $RESULT. $ACTION di http://blankonlinux.id/jahitan-harian/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT [ revisi $COMMIT ] dari $REPO_NAME cabang $BRANCH $RESULT. $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
