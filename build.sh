@@ -58,6 +58,8 @@ if [ -n "$COMMIT" ]; then
      git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
 fi
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
+CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
+COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
 mkdir -p ./tmp/$TODAY-$TODAY_COUNT
 sudo rm -rf config
 cp -vR ./tmp/$TODAY-$TODAY_COUNT/config config
@@ -96,4 +98,4 @@ cp -v blankon-live-image-$ARCH.build.log $TARGET_DIR/blankon-live-image-$ARCH.bu
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT [ revisi $COMMIT ] dari $REPO_NAME cabang $BRANCH $RESULT. $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"parse_mode\": \"HTML\", \"text\": \"Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
