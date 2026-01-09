@@ -13,3 +13,6 @@ gparted
 gedit
 calamares
 calamares-settings
+sudo
+cryptsetup
+keyboard-configuration
