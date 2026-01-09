@@ -68,11 +68,10 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 ## Build
 sudo lb clean
 sudo lb config --architectures $ARCH
-sudo lb build | tee -a blankon-live-image-$ARCH.build.log
+rm -f blankon-live-image-$ARCH.build.log
+sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
-## Live build does not return accurate exit code. Let's determine it from the log.
-BUILD_RESULT=$(tail -n 1 blankon-live-image-$ARCH.build.log)
-if [ "$BUILD_RESULT" == "P: Build completed successfully" ];then
+if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
   RESULT="telah terbit ✅"
   ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
