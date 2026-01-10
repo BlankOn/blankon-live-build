@@ -7,7 +7,7 @@ LB_ARCHITECTURE="amd64"
 LB_DISTRIBUTION="verbeek"
 
 # Select parent distribution to use
-LB_PARENT_DISTRIBUTION=""
+LB_PARENT_DISTRIBUTION="verbeek"
 
 # Select distribution to use in the chroot
 LB_DISTRIBUTION_CHROOT="verbeek"
