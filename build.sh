@@ -66,7 +66,7 @@ cp -vR ./tmp/$TODAY-$TODAY_COUNT/config config
 sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_common/splash.svg
 
 ## Build
-sudo lb clean
+sudo lb clean --purge
 sudo lb config --architectures $ARCH
 rm -f blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
