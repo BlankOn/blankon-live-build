@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+# Disable 'sources' module in Calamares to prevent overwriting sources.list
+# with default/Debian repositories. We want to keep the one from the live system.
+if [ -f /etc/calamares/settings.conf ]; then
+    sed -i 's/^\s*-\s*sources/# - sources/g' /etc/calamares/settings.conf
+    sed -i 's/^\s*-\s*sources-.*$/# &/g' /etc/calamares/settings.conf
+fi
