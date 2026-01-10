@@ -6,3 +6,13 @@ gnome-core
 vim
 firefox
 curl
+jq
+wget
+htop
+gparted
+gedit
+calamares
+calamares-settings
+sudo
+cryptsetup
+keyboard-configuration

@@ -12,3 +12,9 @@ live-image-amd64.hybrid.iso
 live-image-amd64.hybrid.iso.zsync
 live-image-amd64.packages
 local.build.sh
+*.build.log
+*.tail100.build.log.txt
+*.sha256sum
+.env
+.DS_Store
+*~
