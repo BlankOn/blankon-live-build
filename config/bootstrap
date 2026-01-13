@@ -34,7 +34,7 @@ LB_DISTRIBUTION_BINARY="verbeek"
 LB_PARENT_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set parent mirror to fetch packages from
-# LB_PARENT_MIRROR_CHROOT=""
+LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set security parent mirror to fetch packages from
 # LB_PARENT_MIRROR_CHROOT_SECURITY=""
