@@ -68,6 +68,7 @@ DEBOOTSTRAP_OPTIONS="--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
 
 # Set script to use with debootstrap
 LB_DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/sid"
+DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/sid"
 
 # Set options to use with gzip
 GZIP_OPTIONS="-6 --rsyncable"
