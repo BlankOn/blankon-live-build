@@ -49,22 +49,22 @@ LB_ARCHIVE_AREAS="main extras restricted"
 # LB_PARENT_MIRROR_DEBIAN_INSTALLER=""
 
 # Set mirror to bootstrap from
-LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set mirror to fetch packages from
-LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set security mirror to fetch packages from
-LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set mirror which ends up in the image
-LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set security mirror which ends up in the image
-LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set debian-installer mirror
-LB_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/"
+# LB_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
 
 # Set architectures to use foreign bootstrap
 LB_BOOTSTRAP_QEMU_ARCHITECTURE=""
