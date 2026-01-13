@@ -2,15 +2,8 @@ live-boot
 live-config
 live-config-systemd
 blankon-keyring
-build-essential
-devscripts
-debhelper
-ssh
-gnupg
-lintian
 gnome-core
 vim
-firefox
 curl
 jq
 tar
