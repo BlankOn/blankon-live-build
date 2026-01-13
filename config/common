@@ -66,10 +66,10 @@ APTITUDE_OPTIONS="--assume-yes -o Acquire::Retries=5"
 # Set options to use with debootstrap
 DEBOOTSTRAP_OPTIONS="--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg"
 
-LB_DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/sid"
+LB_DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/verbeek"
 
 # Set script to use with debootstrap
-DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/sid"
+DEBOOTSTRAP_SCRIPT="/usr/share/debootstrap/scripts/verbeek"
 
 # Set options to use with gzip
 GZIP_OPTIONS="-6 --rsyncable"
