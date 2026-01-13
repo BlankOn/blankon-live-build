@@ -7,46 +7,46 @@ LB_ARCHITECTURE="amd64"
 LB_DISTRIBUTION="verbeek"
 
 # Select parent distribution to use
-LB_PARENT_DISTRIBUTION=""
+# LB_PARENT_DISTRIBUTION=""
 
 # Select distribution to use in the chroot
 LB_DISTRIBUTION_CHROOT="verbeek"
 
 # Select parent distribution to use in the chroot
-LB_PARENT_DISTRIBUTION_CHROOT="verbeek"
+# LB_PARENT_DISTRIBUTION_CHROOT=""
 
 # Select distribution to use in the final image
 LB_DISTRIBUTION_BINARY="verbeek"
 
 # Select parent distribution to use in the final image
-LB_PARENT_DISTRIBUTION_BINARY="verbeek"
+# LB_PARENT_DISTRIBUTION_BINARY=""
 
 # Select parent distribution for debian-installer to use
-LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
+# LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION=""
 
 # Select archive areas to use
 LB_ARCHIVE_AREAS="main extras restricted"
 
 # Select parent archive areas to use
-LB_PARENT_ARCHIVE_AREAS="main restricted extras"
+# LB_PARENT_ARCHIVE_AREAS=""
 
 # Set parent mirror to bootstrap from
-LB_PARENT_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_BOOTSTRAP=""
 
 # Set parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_CHROOT=""
 
 # Set security parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_CHROOT_SECURITY=""
 
 # Set parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_BINARY=""
 
 # Set security parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_BINARY_SECURITY=""
 
 # Set debian-installer parent mirror
-LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/"
+# LB_PARENT_MIRROR_DEBIAN_INSTALLER=""
 
 # Set mirror to bootstrap from
 LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
