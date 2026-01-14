@@ -25,7 +25,7 @@ LB_DISTRIBUTION_BINARY="verbeek"
 # LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION=""
 
 # Select archive areas to use
-# LB_ARCHIVE_AREAS="main extras restricted" # handle by default.list
+LB_ARCHIVE_AREAS="main extras restricted"
 
 # Select parent archive areas to use
 LB_PARENT_ARCHIVE_AREAS="main restricted extras"
