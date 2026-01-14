@@ -13,16 +13,16 @@ LB_DISTRIBUTION="verbeek"
 LB_DISTRIBUTION_CHROOT="verbeek"
 
 # Select parent distribution to use in the chroot
-# LB_PARENT_DISTRIBUTION_CHROOT=""
-  
+LB_PARENT_DISTRIBUTION_CHROOT="verbeek"
+
 # Select distribution to use in the final image
 LB_DISTRIBUTION_BINARY="verbeek"
 
 # Select parent distribution to use in the final image
-# LB_PARENT_DISTRIBUTION_BINARY=""
+LB_PARENT_DISTRIBUTION_BINARY="verbeek"
 
 # Select parent distribution for debian-installer to use
-# LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION=""
+LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
 
 # Select archive areas to use
 LB_ARCHIVE_AREAS="main extras restricted"
@@ -37,17 +37,16 @@ LB_PARENT_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
 LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set security parent mirror to fetch packages from
-# LB_PARENT_MIRROR_CHROOT_SECURITY=""
+LB_PARENT_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set parent mirror which ends up in the image
-# LB_PARENT_MIRROR_BINARY=""
+LB_PARENT_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set security parent mirror which ends up in the image
-# LB_PARENT_MIRROR_BINARY_SECURITY=""
+LB_PARENT_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set debian-installer parent mirror
-# LB_PARENT_MIRROR_DEBIAN_INSTALLER=""
-
+LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/"
 # Set mirror to bootstrap from
 LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
 
