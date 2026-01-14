@@ -49,19 +49,19 @@ LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
 # LB_PARENT_MIRROR_DEBIAN_INSTALLER=""
 
 # Set mirror to bootstrap from
-# LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
+LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set mirror to fetch packages from
-# LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
+LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set security mirror to fetch packages from
-# LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
+LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set mirror which ends up in the image
-# LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
+LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set security mirror which ends up in the image
-# LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
+LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
 
 # Set debian-installer mirror
 # LB_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/" # handle by default.list
