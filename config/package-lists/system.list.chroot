@@ -5,3 +5,6 @@ live-boot
 live-config
 live-config-systemd
 sudo
+firmware-amd-graphics
+firmware-linux
+firmware-linux-nonfree
