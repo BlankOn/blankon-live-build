@@ -1,0 +1,12 @@
+label live-@FLAVOUR@
+	menu label ^Try/Install BlankOn (@FLAVOUR@)
+	menu default
+	linux @LINUX@
+	initrd @INITRD@
+	append @APPEND_LIVE@
+
+label live-@FLAVOUR@-failsafe
+	menu label Try/Install BlankOn (@FLAVOUR@ failsafe)
+	linux @LINUX@
+	initrd @INITRD@
+	append @APPEND_LIVE_FAILSAFE@
