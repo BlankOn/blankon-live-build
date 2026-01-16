@@ -6,5 +6,4 @@ live-config
 live-config-systemd
 sudo
 firmware-amd-graphics
-firmware-linux
-firmware-linux-nonfree
+firmware-misc-nonfree
