@@ -28,7 +28,7 @@ LB_BOOTLOADER_EFI="grub-efi"
 LB_CHECKSUMS="sha256"
 
 # Set compression
-LB_COMPRESSION="gzip"
+LB_COMPRESSION="xz"
 
 # Set zsync
 LB_ZSYNC="true"
