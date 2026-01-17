@@ -6,5 +6,4 @@ live-config
 live-config-systemd
 sudo
 firmware-amd-graphics
-firmware-misc-nonfree
 plymouth-theme-blankon
