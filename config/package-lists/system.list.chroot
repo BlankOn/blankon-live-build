@@ -16,8 +16,6 @@ firmware-cirrus
 firmware-intel-graphics
 firmware-intel-misc
 firmware-intel-sound
-firmware-ipw2x00
-firmware-ivtv
 firmware-iwlwifi
 firmware-libertas
 firmware-linux-nonfree
