@@ -25,4 +25,5 @@ firmware-qlogic
 firmware-realtek
 firmware-samsung
 firmware-siano
+firmware-sof
 firmware-ti-connectivity
