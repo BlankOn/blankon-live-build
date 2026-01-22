@@ -6,3 +6,4 @@ wget
 htop
 tmux
 netcat-openbsd
+systemd-coredump
