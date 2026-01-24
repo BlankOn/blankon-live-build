@@ -26,3 +26,5 @@ firmware-realtek
 firmware-samsung
 firmware-siano
 firmware-ti-connectivity
+firmware-iwlwifi
+firmware-intel-misc
