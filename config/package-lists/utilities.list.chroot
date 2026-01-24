@@ -4,3 +4,6 @@ jq
 tar
 wget
 htop
+tmux
+netcat-openbsd
+systemd-coredump
