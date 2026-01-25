@@ -20,7 +20,7 @@ BRANCH=$2
 REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|')
 # Optional
 COMMIT=$3
-ARCH=amd64
+ARCH=arm64
 
 START=$(date +%s)
 
@@ -79,7 +79,7 @@ if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed s
   cp -v blankon-live-image-$ARCH.files $TARGET_DIR/blankon-live-image-$ARCH.files
   cp -v blankon-live-image-$ARCH.packages $TARGET_DIR/blankon-live-image-$ARCH.packages
   cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
-  zsyncmake -u "http://jahitan.blankonlinux.id/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
+  zsyncmake -u "http://jahitan.blankonlinux.id/current/blankon-live-image-arm64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
   rm -rf $JAHITAN_PATH/current
   #ln -s $TARGET_DIR $JAHITAN_PATH/current

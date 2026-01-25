@@ -19,7 +19,7 @@ LB_INTERACTIVE="false"
 LB_KEYRING_PACKAGES="blankon-keyring"
 
 # Set kernel flavour to use (with arch)
-LB_LINUX_FLAVOURS_WITH_ARCH="amd64"
+LB_LINUX_FLAVOURS_WITH_ARCH="arm64"
 
 # Set kernel packages to use
 LB_LINUX_PACKAGES="linux-image"
