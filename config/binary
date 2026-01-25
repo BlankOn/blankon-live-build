@@ -10,7 +10,7 @@ LB_BINARY_FILESYSTEM="fat32"
 LB_APT_INDICES="true"
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE="boot=live components quiet splash username=blankon hostname=blankon"
+LB_BOOTAPPEND_LIVE="boot=live components username=blankon hostname=blankon systemd.unit=multi-user.target"
 
 # Set boot parameters
 LB_BOOTAPPEND_INSTALL=""
