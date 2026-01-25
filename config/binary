@@ -31,7 +31,7 @@ LB_CHECKSUMS="sha256"
 LB_COMPRESSION="xz"
 
 # Set zsync
-LB_ZSYNC="true"
+LB_ZSYNC="false"
 
 # Control if we build binary images chrooted
 # NEVER, *EVER*, *E*V*E*R* SET THIS OPTION to false.
