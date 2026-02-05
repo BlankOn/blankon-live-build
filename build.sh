@@ -2,7 +2,6 @@
 
 # Load configuration from .env file
 
-echo "This is new version of the build.sh"
 if [ -f .env ]; then
   source .env
 fi
@@ -114,6 +113,11 @@ if [ ! -n "$4" ]; then
     else
         exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
     fi
+fi
+
+# Cleanup for auto update
+if [ -f "./build.sh.old" ]; then
+    rm ./build.sh.old
 fi
 
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
