@@ -79,7 +79,7 @@ if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
     exit 1
 fi
 # Double-check the clone succeeded by verifying .git exists
-if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
+if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/" ]; then
     FAILURE_REASON="Error: Clone directory is missing or incomplete"
     exit 1
 fi
