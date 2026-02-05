@@ -13,6 +13,7 @@ fi
 ## Default messages
 RESULT="gagal terbit ❌"
 ACTION="Log build dapat disimak"
+FAILURE_REASON=""
 
 ## Args
 REPO=$1
@@ -36,6 +37,29 @@ then
   exit $?
 fi
 
+# Helper function
+send_telegram() {
+    local message="$1"
+    curl -X POST -H 'Content-Type: application/json' \
+        -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"parse_mode\": \"HTML\", \"disable_web_page_preview\": true, \"text\": \"$message\", \"disable_notification\": true}" \
+        https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
+}
+
+cleanup() {
+    if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
+        if [ -n "$COMMIT_URL" ]; then
+            # Clone succeeded, we have commit info
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+        else
+            # Clone failed, no commit info available
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+        fi
+    fi
+}
+
+# Setup trap
+trap cleanup EXIT
+
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
@@ -50,13 +74,22 @@ sudo mkdir -p tmp || true
 sudo chmod -R a+rw tmp
 
 ## Preparation
-git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT
+if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
+    FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
+    exit 1
+fi
+# Double-check the clone succeeded by verifying .git exists
+if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/" ]; then
+    FAILURE_REASON="Error: Clone directory is missing or incomplete"
+    exit 1
+fi
 
 # If a specific commit was passed, switch to it.
 # If not, stay on the latest code from the branch.
 if [ -n "$COMMIT" ]; then
      git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
 fi
+
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
 CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
 COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
@@ -97,5 +130,3 @@ cp -v blankon-live-image-$ARCH.build.log $TARGET_DIR/blankon-live-image-$ARCH.bu
 
 ## Clean up the mounted entities
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
-
-curl -X POST -H 'Content-Type: application/json' -d "{\"chat_id\": \"-1001067745576\", \"message_thread_id\": \"51909\", \"parse_mode\": \"HTML\", \"disable_web_page_preview\": true, \"text\": \" 💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/\", \"disable_notification\": true}" https://api.telegram.org/bot$TELEGRAM_BOT_KEY/sendMessage
