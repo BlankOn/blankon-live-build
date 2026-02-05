@@ -52,6 +52,12 @@ sudo chmod -R a+rw tmp
 ## Preparation
 git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT
 
+# Terminate if clone failed
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to clone $REPO branch $BRANCH"
+    exit 1
+fi
+
 # If a specific commit was passed, switch to it.
 # If not, stay on the latest code from the branch.
 if [ -n "$COMMIT" ]; then
