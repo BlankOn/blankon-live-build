@@ -74,11 +74,13 @@ sudo mkdir -p tmp || true
 sudo chmod -R a+rw tmp
 
 ## Preparation
-git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT
-
-# Terminate if clone failed
-if [ $? -ne 0 ]; then
+if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
     FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
+    exit 1
+fi
+# Double-check the clone succeeded by verifying .git exists
+if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
+    FAILURE_REASON="Error: Clone directory is missing or incomplete"
     exit 1
 fi
 
