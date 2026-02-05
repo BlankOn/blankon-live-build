@@ -47,7 +47,13 @@ send_telegram() {
 
 cleanup() {
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
-        send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+        if [ -n "$COMMIT_URL" ]; then
+            # Clone succeeded, we have commit info
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+        else
+            # Clone failed, no commit info available
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+        fi
     fi
 }
 
@@ -81,6 +87,7 @@ fi
 if [ -n "$COMMIT" ]; then
      git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
 fi
+
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
 CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
 COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
