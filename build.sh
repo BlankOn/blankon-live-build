@@ -10,33 +10,6 @@ if [ -z "$TELEGRAM_BOT_KEY" ]; then
   exit 1
 fi
 
-## Default messages
-RESULT="gagal terbit ❌"
-ACTION="Log build dapat disimak"
-FAILURE_REASON=""
-
-## Args
-REPO=$1
-BRANCH=$2
-REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|')
-# Optional
-COMMIT=$3
-ARCH=amd64
-
-START=$(date +%s)
-
-sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
-sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
-
-## Skip further steps if this is a build in local computer
-if [ -z "$REPO" ] || [ -z "$BRANCH" ]
-then
-  sudo lb clean --purge
-  sudo lb config --architectures $ARCH
-  sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
-  exit $?
-fi
-
 # Helper function
 send_telegram() {
     local message="$1"
@@ -52,10 +25,42 @@ cleanup() {
             send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
         else
             # Clone failed, no commit info available
-            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON "
         fi
     fi
 }
+
+## Default messages
+RESULT="gagal terbit ❌"
+ACTION="Log build dapat disimak"
+FAILURE_REASON=""
+
+## Args
+REPO=$1
+BRANCH=$2
+COMMIT=$3
+REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|')
+
+# Optional
+ARCH=amd64
+
+START=$(date +%s)
+
+sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
+
+# This is for auto update build.sh
+if [ ! -n "$4"]; then
+    sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
+fi
+
+## Skip further steps if this is a build in local computer
+if [ -z "$REPO" ] || [ -z "$BRANCH" ]
+then
+  sudo lb clean --purge
+  sudo lb config --architectures $ARCH
+  sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
+  exit $?
+fi
 
 # Setup trap
 trap cleanup EXIT
@@ -65,29 +70,48 @@ echo "Processing $REPO $BRANCH $COMMIT ..."
 ## Assume that this is in prod
 JAHITAN_PATH=/home/user/jahitan-harian
 TODAY=$(date '+%Y%m%d')
-TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
-TODAY_COUNT=$(($TODAY_COUNT + 1))
+
+# This is for auto update build.sh
+if [ ! -n "$4" ]; then
+    TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
+    TODAY_COUNT=$(($TODAY_COUNT + 1))
+else
+    TODAY_COUNT=$4
+fi
+
 TARGET_DIR=$JAHITAN_PATH/$TODAY-$TODAY_COUNT
 
-mkdir -p $TARGET_DIR
-sudo mkdir -p tmp || true
-sudo chmod -R a+rw tmp
+# This is for auto update build.sh
+if [ ! -n "$4" ]; then
+    mkdir -p $TARGET_DIR
+    sudo mkdir -p tmp || true
+    sudo chmod -R a+rw tmp
 
-## Preparation
-if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
-    FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
-    exit 1
-fi
-# Double-check the clone succeeded by verifying .git exists
-if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/" ]; then
-    FAILURE_REASON="Error: Clone directory is missing or incomplete"
-    exit 1
-fi
+    ## Preparation
+    if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
+        FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
+        exit 1
+    fi
+    # Double-check the clone succeeded by verifying .git exists
+    if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/" ]; then
+        FAILURE_REASON="Error: Clone directory is missing or incomplete"
+        exit 1
+    fi
 
-# If a specific commit was passed, switch to it.
-# If not, stay on the latest code from the branch.
-if [ -n "$COMMIT" ]; then
-     git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
+    # If a specific commit was passed, switch to it.
+    # If not, stay on the latest code from the branch.
+    if [ -n "$COMMIT" ]; then
+        git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
+    fi
+
+    if [ -f "./tmp/$TODAY-$TODAY_COUNT/build.sh" ]; then
+        mv ./build.sh ./build.sh.old
+        cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
+        chmod +x ./build.sh
+        exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+    else
+        exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+    fi
 fi
 
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
