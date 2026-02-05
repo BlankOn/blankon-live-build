@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Load configuration from .env file
+
+echo "This is new version of the build.sh"
 if [ -f .env ]; then
   source .env
 fi
