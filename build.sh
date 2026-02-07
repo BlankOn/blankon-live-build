@@ -105,16 +105,24 @@ if [ -z "$4" ]; then
         git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
     fi
 
+    # Check for new build.sh
     if [ -f "./tmp/$TODAY-$TODAY_COUNT/build.sh" ]; then
         if ! diff -qwB ./build.sh "./tmp/$TODAY-$TODAY_COUNT/build.sh" > /dev/null 2>&1; then
-            mv ./build.sh ./build.sh.old
-            cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
-            chmod +x ./build.sh
-        exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+            # Check syntax first
+            if bash -n "./tmp/$TODAY-$TODAY_COUNT/build.sh" 2>/dev/null; then
+                echo "Detected updated build.sh with valid syntax, switching..."
+                mv ./build.sh ./build.sh.old
+                cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
+                chmod +x ./build.sh
+                exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+            else
+                echo "Warning: New build.sh has syntax errors, keeping current version."n
+            fi
+        else
+            echo "Keeping the Old build.sh"
         fi
-    else
-        echo "Warning: No build.sh found in cloned repository; continuing without self-update."
     fi
+
 fi
 
 # Cleanup for auto update
