@@ -94,7 +94,7 @@ if [ -z "$4" ]; then
         exit 1
     fi
     # Double-check the clone succeeded by verifying .git exists
-    if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/" ]; then
+    if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
         FAILURE_REASON="Error: Clone directory is missing or incomplete"
         exit 1
     fi
@@ -116,7 +116,7 @@ if [ -z "$4" ]; then
                 chmod +x ./build.sh
                 exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
             else
-                echo "Warning: New build.sh has syntax errors, keeping current version."n
+                echo "Warning: New build.sh has syntax errors, keeping current version."
             fi
         else
             echo "Keeping the Old build.sh"
