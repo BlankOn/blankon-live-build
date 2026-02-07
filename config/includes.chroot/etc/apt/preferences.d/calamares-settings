@@ -1,0 +1,3 @@
+Package: calamares-settings
+Pin: version *
+Pin-Priority: -1
