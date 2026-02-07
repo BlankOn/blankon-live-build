@@ -11,6 +11,22 @@ if [ -z "$TELEGRAM_BOT_KEY" ]; then
   exit 1
 fi
 
+# Create Lockfile
+LOCKFILE="/tmp/blankon-build.lock"
+
+if [ -f "$LOCKFILE" ]; then
+    OLD_PID=$(cat "$LOCKFILE")
+    if ps -p "$OLD_PID" > /dev/null 2>&1; then
+        echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
+        exit 1
+    else
+        echo "Warning: Removing stale lock file from PID $OLD_PID"
+        rm -f "$LOCKFILE"
+    fi
+fi
+
+echo $$ > "$LOCKFILE"
+
 # Helper function
 send_telegram() {
     local message="$1"
@@ -20,6 +36,7 @@ send_telegram() {
 }
 
 cleanup() {
+    rm -f "$LOCKFILE"   # Add this line
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
