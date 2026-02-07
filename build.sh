@@ -57,7 +57,7 @@ fi
 ## Skip further steps if this is a build in local computer
 if [ -z "$REPO" ] || [ -z "$BRANCH" ]
 then
-  sudo lb clean --purge
+  sudo lb clean
   sudo lb config --architectures $ARCH
   sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
