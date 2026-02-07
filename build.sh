@@ -50,7 +50,7 @@ START=$(date +%s)
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
 # This is for auto update build.sh
-if [ ! -n "$4"]; then
+if [ -z "$4" ]; then
     sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
 fi
 
@@ -73,7 +73,7 @@ JAHITAN_PATH=/home/user/jahitan-harian
 TODAY=$(date '+%Y%m%d')
 
 # This is for auto update build.sh
-if [ ! -n "$4" ]; then
+if [ -z "$4" ]; then
     TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
     TODAY_COUNT=$(($TODAY_COUNT + 1))
 else
@@ -83,7 +83,7 @@ fi
 TARGET_DIR=$JAHITAN_PATH/$TODAY-$TODAY_COUNT
 
 # This is for auto update build.sh
-if [ ! -n "$4" ]; then
+if [ -z "$4" ]; then
     mkdir -p $TARGET_DIR
     sudo mkdir -p tmp || true
     sudo chmod -R a+rw tmp
@@ -111,7 +111,7 @@ if [ ! -n "$4" ]; then
         chmod +x ./build.sh
         exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
     else
-        exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+        echo "Warning: No build.sh found in cloned repository; continuing without self-update."
     fi
 fi
 
