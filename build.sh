@@ -14,18 +14,19 @@ fi
 # Create Lockfile
 LOCKFILE="/tmp/blankon-build.lock"
 
-if [ -f "$LOCKFILE" ]; then
-    OLD_PID=$(cat "$LOCKFILE")
-    if ps -p "$OLD_PID" > /dev/null 2>&1; then
-        echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
-        exit 1
-    else
-        echo "Warning: Removing stale lock file from PID $OLD_PID"
-        rm -f "$LOCKFILE"
+if [ -z "$4" ]; then
+    if [ -f "$LOCKFILE" ]; then
+        OLD_PID=$(cat "$LOCKFILE")
+        if ps -p "$OLD_PID" > /dev/null 2>&1; then
+            echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
+            exit 1
+        else
+            echo "Warning: Removing stale lock file from PID $OLD_PID"
+            rm -f "$LOCKFILE"
+        fi
     fi
+    echo $$ > "$LOCKFILE"
 fi
-
-echo $$ > "$LOCKFILE"
 
 # Helper function
 send_telegram() {
@@ -36,7 +37,7 @@ send_telegram() {
 }
 
 cleanup() {
-    rm -f "$LOCKFILE"   # Add this line
+    rm -f "$LOCKFILE"
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
@@ -47,6 +48,9 @@ cleanup() {
         fi
     fi
 }
+
+# Setup trap
+trap cleanup EXIT
 
 ## Default messages
 RESULT="gagal terbit ❌"
@@ -79,9 +83,6 @@ then
   sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
 fi
-
-# Setup trap
-trap cleanup EXIT
 
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
