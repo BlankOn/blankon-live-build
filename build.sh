@@ -106,10 +106,12 @@ if [ -z "$4" ]; then
     fi
 
     if [ -f "./tmp/$TODAY-$TODAY_COUNT/build.sh" ]; then
-        mv ./build.sh ./build.sh.old
-        cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
-        chmod +x ./build.sh
+        if ! diff -qwB ./build.sh "./tmp/$TODAY-$TODAY_COUNT/build.sh" > /dev/null 2>&1; then
+            mv ./build.sh ./build.sh.old
+            cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
+            chmod +x ./build.sh
         exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
+        fi
     else
         echo "Warning: No build.sh found in cloned repository; continuing without self-update."
     fi
