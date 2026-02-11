@@ -6,3 +6,6 @@ live-config
 live-config-systemd
 sudo
 plymouth-theme-blankon
+plymouth-label
+fontconfig
+zstd
