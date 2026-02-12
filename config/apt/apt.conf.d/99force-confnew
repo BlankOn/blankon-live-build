@@ -1,2 +1,0 @@
-# automatically picks the package maintainer's version
-Dpkg::Options { "--force-confnew"; } 
