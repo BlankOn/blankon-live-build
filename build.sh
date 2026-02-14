@@ -153,7 +153,7 @@ CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
 COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
 mkdir -p ./tmp/$TODAY-$TODAY_COUNT
 sudo rm -rf config
-cp -vR ./tmp/$TODAY-$TODAY_COUNT/config config
+sudo cp -vR ./tmp/$TODAY-$TODAY_COUNT/config config
 sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_common/splash.svg
 
 ## Build
