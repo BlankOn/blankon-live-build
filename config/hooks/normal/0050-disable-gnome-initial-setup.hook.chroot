@@ -1,9 +1,0 @@
-#!/bin/sh
-
-set -e
-
-# Disable GNOME initial setup wizard by placing the marker file in /etc/skel
-# so all new users will have it in their home directory automatically.
-
-mkdir -p /etc/skel/.config
-echo "yes" > /etc/skel/.config/gnome-initial-setup-done
