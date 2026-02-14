@@ -1,0 +1,4 @@
+# This was added by Sofyan Sugianto in 2021-01-23
+Package: firefox-esr
+Pin: version *
+Pin-Priority: -1
