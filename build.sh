@@ -159,7 +159,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
-rm -f blankon-live-image-$ARCH.build.log
+rm -rf blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
 if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
