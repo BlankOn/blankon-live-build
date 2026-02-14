@@ -159,7 +159,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
-rm -rf blankon-live-image-$ARCH.build.log
+sudo rm -rf blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
 if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
@@ -172,10 +172,10 @@ if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed s
   cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   zsyncmake -u "http://jahitan.blankonlinux.id/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
-  rm -rf $JAHITAN_PATH/current
+  sudo rm -rf $JAHITAN_PATH/current
   #ln -s $TARGET_DIR $JAHITAN_PATH/current
-  cp -vR $TARGET_DIR $JAHITAN_PATH/current
-  echo "$TODAY-$TODAY_COUNT" > $JAHITAN_PATH/current/current.txt
+  sudo cp -vR $TARGET_DIR $JAHITAN_PATH/current
+  sudo echo "$TODAY-$TODAY_COUNT" > $JAHITAN_PATH/current/current.txt
 fi
 
 END=$(date +%s)
