@@ -10,3 +10,4 @@ plymouth-label
 fontconfig
 zstd
 squashfs-tools
+dosfstools
