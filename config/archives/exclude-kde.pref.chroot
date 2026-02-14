@@ -1,0 +1,3 @@
+Package: systemsettings
+Pin: release *
+Pin-Priority: -1

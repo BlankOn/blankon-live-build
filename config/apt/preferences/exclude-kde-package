@@ -1,3 +1,0 @@
-Package: systemsettings kactivitymanagerd kded6 kio6 kwallet6 plasma-activities-bin libkf6*
-Pin: release *
-Pin-Priority: -1
