@@ -1,0 +1,4 @@
+# This was added by Sofyan Sugianto in 2021-01-23
+Package: termit
+Pin: version *
+Pin-Priority: -1

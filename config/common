@@ -13,7 +13,7 @@ LB_APT_HTTP_PROXY=""
 LB_APT_PIPELINE=""
 
 # Set apt/aptitude recommends
-LB_APT_RECOMMENDS="false"
+LB_APT_RECOMMENDS="true"
 
 # Set apt/aptitude security
 LB_APT_SECURE="true"
