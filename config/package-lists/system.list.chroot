@@ -9,3 +9,4 @@ plymouth-theme-blankon
 plymouth-label
 fontconfig
 zstd
+squashfs-tools
