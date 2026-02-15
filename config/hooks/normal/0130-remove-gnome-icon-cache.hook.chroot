@@ -2,8 +2,10 @@
 
 set -e
 
-# Remove GNOME icon cache.
-#
-# This saves space some space.
+# Rebuild GNOME icon cache to ensure icons load properly.
 
-rm -f /usr/share/icons/*/icon-theme.cache
+for dir in /usr/share/icons/*/; do
+	if [ -f "${dir}index.theme" ]; then
+		gtk-update-icon-cache -f -q "${dir}" 2>/dev/null || true
+	fi
+done
