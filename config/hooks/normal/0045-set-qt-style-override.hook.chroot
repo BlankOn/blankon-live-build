@@ -3,4 +3,4 @@
 set -e
 
 # Append QT_QPA_PLATFORMTHEME to /etc/environment
-echo "QT_QPA_PLATFORMTHEME=gnome" >> /etc/environment
+echo "QT_STYLE_OVERRIDE=Adwaita" >> /etc/environment
