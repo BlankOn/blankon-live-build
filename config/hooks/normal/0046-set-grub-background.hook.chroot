@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+# Convert BlankOn splash SVG to PNG for GRUB background.
+# Strip live-build template variables (@VAR@) before rendering.
+SVG_SRC=/usr/share/backgrounds/blankon/grub-splash.svg
+GRUB_DIR=/usr/share/backgrounds/blankon
+GRUB_PNG=${GRUB_DIR}/grub-splash.png
+
+if [ -f "${SVG_SRC}" ]; then
+    sed 's/@[A-Z_]*@//g' "${SVG_SRC}" > "${SVG_SRC}.tmp"
+    rsvg-convert -w 1920 -h 1080 "${SVG_SRC}.tmp" -o "${GRUB_PNG}"
+    rm -f "${SVG_SRC}" "${SVG_SRC}.tmp"
+
+    # Register as desktop-grub alternative with high priority to override Debian default
+    update-alternatives --install /usr/share/images/desktop-base/desktop-grub.png \
+        desktop-grub "${GRUB_PNG}" 60
+fi
