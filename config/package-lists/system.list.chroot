@@ -11,3 +11,4 @@ fontconfig
 zstd
 squashfs-tools
 dosfstools
+librsvg2-bin

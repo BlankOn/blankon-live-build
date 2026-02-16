@@ -19,7 +19,6 @@ gnome-calendar
 gnome-characters
 gnome-clocks
 gnome-connections
-ptyxis
 gnome-contacts
 gnome-disk-utility
 gnome-font-viewer
@@ -37,7 +36,6 @@ simple-scan
 gnome-snapshot
 yelp
 cups
-evolution-data-server
 fonts-adwaita
 fonts-cantarell
 gstreamer1.0-packagekit
@@ -58,7 +56,6 @@ totem-video-thumbnailer
 zenity
 firefox
 gnome-remote-desktop
-gnome-tour
 gnome-user-share
 locales-all
 network-manager
