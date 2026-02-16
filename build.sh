@@ -129,9 +129,9 @@ if [ -z "$4" ]; then
             # Check syntax first
             if bash -n "./tmp/$TODAY-$TODAY_COUNT/build.sh" 2>/dev/null; then
                 echo "Detected updated build.sh with valid syntax, switching..."
-                mv ./build.sh ./build.sh.old
-                cp ./tmp/$TODAY-$TODAY_COUNT/build.sh ./build.sh
-                chmod +x ./build.sh
+                sudo mv ./build.sh ./build.sh.old
+                sudo cp "./tmp/$TODAY-$TODAY_COUNT/build.sh" ./build.sh
+                sudo chmod +x ./build.sh
                 exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
             else
                 echo "Warning: New build.sh has syntax errors, keeping current version."
@@ -145,7 +145,7 @@ fi
 
 # Cleanup for auto update
 if [ -f "./build.sh.old" ]; then
-    rm ./build.sh.old
+    sudo rm ./build.sh.old
 fi
 
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
