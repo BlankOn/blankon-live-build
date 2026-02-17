@@ -2,7 +2,7 @@
 
 set -e
 
-# Rebuild GNOME icon cache to ensure icons load properly.
+# Rebuild icon cache to ensure icons load properly.
 
 for dir in /usr/share/icons/*/; do
 	if [ -f "${dir}index.theme" ]; then

@@ -2,5 +2,5 @@
 
 set -e
 
-# Append QT_QPA_PLATFORMTHEME to /etc/environment
-echo "QT_STYLE_OVERRIDE=Adwaita" >> /etc/environment
+# Set Qt platform theme to follow GTK settings
+echo "QT_QPA_PLATFORMTHEME=gtk2" >> /etc/environment
