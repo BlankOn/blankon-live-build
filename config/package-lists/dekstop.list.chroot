@@ -6,3 +6,5 @@ tilingshell-gnome-shell-extension
 adwaita-qt
 adwaita-qt6
 ptyxis
+fprintd
+libpam-fprintd
