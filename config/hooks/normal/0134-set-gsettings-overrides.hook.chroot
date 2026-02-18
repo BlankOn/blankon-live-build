@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+# Set GSettings distro defaults (scaling-factor, etc.)
+
+cat > /usr/share/glib-2.0/schemas/90_distro_defaults.gschema.override << 'EOF'
+[org.gnome.desktop.interface]
+scaling-factor=1
+EOF
