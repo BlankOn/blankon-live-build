@@ -27,5 +27,4 @@ firmware-samsung
 firmware-siano
 firmware-sof-signed
 firmware-ti-connectivity
-firmware-iwlwifi
 firmware-intel-misc
