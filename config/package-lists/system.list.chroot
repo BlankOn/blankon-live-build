@@ -12,3 +12,4 @@ zstd
 squashfs-tools
 dosfstools
 librsvg2-bin
+alsa-utils
