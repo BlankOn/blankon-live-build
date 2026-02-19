@@ -2,6 +2,24 @@
 
 set -e
 
+# Generate id_ID.UTF-8 locale
+sed -i 's/^# *id_ID.UTF-8/id_ID.UTF-8/' /etc/locale.gen
+locale-gen
+
 # Create /etc/environment and /etc/default/locale
-touch /etc/environment
-echo "LANG=id_ID.UTF-8" >/etc/default/locale
+cat > /etc/default/locale << 'EOF'
+LANG=id_ID.UTF-8
+LANGUAGE=id_ID:id
+EOF
+
+cat > /etc/environment << 'EOF'
+LANG=id_ID.UTF-8
+LANGUAGE=id_ID:id
+EOF
+
+# Set AccountsService language for the live user
+mkdir -p /var/lib/AccountsService/users
+cat > /var/lib/AccountsService/users/blankon << 'EOF'
+[User]
+Language=id_ID.UTF-8
+EOF
