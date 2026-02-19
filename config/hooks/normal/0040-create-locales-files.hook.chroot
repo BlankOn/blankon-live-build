@@ -4,4 +4,4 @@ set -e
 
 # Create /etc/environment and /etc/default/locale
 touch /etc/environment
-echo "LANG=en_US.UTF-8" >/etc/default/locale
+echo "LANG=id_ID.UTF-8" >/etc/default/locale
