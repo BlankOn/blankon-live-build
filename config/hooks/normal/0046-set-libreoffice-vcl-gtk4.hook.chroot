@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+# Use GTK4 VCL plugin for LibreOffice
+echo "SAL_USE_VCLPLUGIN=gtk4" >> /etc/environment

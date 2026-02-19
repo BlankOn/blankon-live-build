@@ -11,3 +11,5 @@ libpam-fprintd
 fonts-noto-core
 locales
 task-indonesian-desktop
+libreoffice
+libreoffice-gtk4
