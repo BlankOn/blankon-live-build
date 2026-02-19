@@ -8,3 +8,14 @@ cat > /usr/share/glib-2.0/schemas/90_distro_defaults.gschema.override << 'EOF'
 [org.gnome.desktop.interface]
 scaling-factor=1
 EOF
+
+# Set GDM greeter scaling to 100% (GDM uses its own dconf database,
+# not the GSettings overrides above)
+for f in /etc/gdm3/greeter.dconf-defaults /usr/share/gdm/greeter.dconf-defaults; do
+    if [ -f "$f" ]; then
+        # Check if scaling-factor is already set under [org/gnome/desktop/interface]
+        if ! grep -q 'scaling-factor=' "$f"; then
+            sed -i '/^\[org\/gnome\/desktop\/interface\]/a scaling-factor=1\ntext-scaling-factor=1.0' "$f"
+        fi
+    fi
+done
