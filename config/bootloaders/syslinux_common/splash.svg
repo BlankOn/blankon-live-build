@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="640"
    height="480"
    id="svg3320"
    version="1.1"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   sodipodi:docname="splash.svg">
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   sodipodi:docname="splash.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs3322">
     <linearGradient
@@ -126,25 +126,30 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.55"
-     inkscape:cx="367.65548"
-     inkscape:cy="219.46707"
+     inkscape:cx="367.74194"
+     inkscape:cy="219.67742"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="2560"
-     inkscape:window-height="1376"
+     inkscape:window-width="1910"
+     inkscape:window-height="1002"
      inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:document-rotation="0">
+     inkscape:document-rotation="0"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <sodipodi:guide
        id="guide935"
        orientation="0,-1"
-       position="239.04771,448.06615" />
+       position="239.04771,448.06615"
+       inkscape:locked="false" />
     <sodipodi:guide
        id="guide939"
        orientation="0,-1"
-       position="-12.317344,280.64151" />
+       position="-12.317344,280.64151"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata3325">
@@ -254,7 +259,7 @@
          x="208.75053"
          sodipodi:role="line"
          style="font-style:normal;font-weight:bold;font-size:19.4344px;line-height:1;-inkscape-font-specification:'DejaVu Sans Bold';stroke-width:0.971718"
-         id="tspan3037">Jahitan BlankOn 26.0 Verbeek </tspan><tspan
+         id="tspan3037">BlankOn Linux 26.0 Verbeek Beta 1</tspan><tspan
          y="634.58612"
          x="208.75053"
          sodipodi:role="line"
