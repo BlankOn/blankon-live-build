@@ -41,7 +41,7 @@ cleanup() {
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
-            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://jahitan.blankonlinux.id/$TODAY-$TODAY_COUNT/"
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://arsip-dev.blankonlinux.id/iso/jahitan/$TODAY-$TODAY_COUNT/"
         else
             # Clone failed, no commit info available
             send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON "
@@ -87,7 +87,7 @@ fi
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
-JAHITAN_PATH=/home/user/jahitan-harian
+JAHITAN_PATH=/home/user/iso/jahitan
 TODAY=$(date '+%Y%m%d')
 
 # This is for auto update build.sh
@@ -123,24 +123,6 @@ if [ -z "$4" ]; then
         git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
     fi
 
-    # Check for new build.sh
-    if [ -f "./tmp/$TODAY-$TODAY_COUNT/build.sh" ]; then
-        if ! diff -qwB ./build.sh "./tmp/$TODAY-$TODAY_COUNT/build.sh" > /dev/null 2>&1; then
-            # Check syntax first
-            if bash -n "./tmp/$TODAY-$TODAY_COUNT/build.sh" 2>/dev/null; then
-                echo "Detected updated build.sh with valid syntax, switching..."
-                sudo mv ./build.sh ./build.sh.old
-                sudo cp "./tmp/$TODAY-$TODAY_COUNT/build.sh" ./build.sh
-                sudo chmod +x ./build.sh
-                exec ./build.sh "$REPO" "$BRANCH" "$COMMIT" "$TODAY_COUNT"
-            else
-                echo "Warning: New build.sh has syntax errors, keeping current version."
-            fi
-        else
-            echo "Keeping the Old build.sh"
-        fi
-    fi
-
 fi
 
 # Cleanup for auto update
@@ -170,7 +152,7 @@ if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed s
   cp -v blankon-live-image-$ARCH.files $TARGET_DIR/blankon-live-image-$ARCH.files
   cp -v blankon-live-image-$ARCH.packages $TARGET_DIR/blankon-live-image-$ARCH.packages
   cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
-  zsyncmake -u "http://jahitan.blankonlinux.id/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
+  zsyncmake -u "http://arsip-dev.blankonlinux.id/iso/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso | sed 's#  .*/#  #' > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
   sudo rm -rf $JAHITAN_PATH/current
   #ln -s $TARGET_DIR $JAHITAN_PATH/current
