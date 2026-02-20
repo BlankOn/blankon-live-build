@@ -1,2 +1,6 @@
 [org.gnome.desktop.interface]
 icon-theme='Adwaita'
+
+[org.gnome.desktop.background]
+picture-uri='file:///usr/share/backgrounds/gnome/amber-d.jxl'
+picture-uri-dark='file:///usr/share/backgrounds/gnome/amber-d.jxl'
