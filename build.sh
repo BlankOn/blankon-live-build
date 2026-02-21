@@ -6,25 +6,29 @@ if [ -f .env ]; then
   source .env
 fi
 
-if [ -z "$TELEGRAM_BOT_KEY" ]; then
-  echo "Error: TELEGRAM_BOT_KEY is missing. Please check your .env file."
+# Make sure envar is set
+MISSING_VARS=""
+[ -z "$TELEGRAM_BOT_KEY" ] && MISSING_VARS="$MISSING_VARS TELEGRAM_BOT_KEY"
+[ -z "$BUILD_LOCKFILE" ] && MISSING_VARS="$MISSING_VARS BUILD_LOCKFILE"
+[ -z "$BUILD_JAHITAN_PATH" ] && MISSING_VARS="$MISSING_VARS BUILD_JAHITAN_PATH"
+[ -z "$BUILD_PUBLISH_URL" ] && MISSING_VARS="$MISSING_VARS BUILD_PUBLISH_URL"
+if [ -n "$MISSING_VARS" ]; then
+  echo "Error: The following environment variables are missing:$MISSING_VARS"
+  echo "Please check your .env file."
   exit 1
 fi
 
-# Create Lockfile
-LOCKFILE="/tmp/blankon-build.lock"
-
-if [ -f "$LOCKFILE" ]; then
-    OLD_PID=$(cat "$LOCKFILE")
+if [ -f "$BUILD_LOCKFILE" ]; then
+    OLD_PID=$(cat "$BUILD_LOCKFILE")
     if ps -p "$OLD_PID" > /dev/null 2>&1; then
         echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
         exit 1
     else
         echo "Warning: Removing stale lock file from PID $OLD_PID"
-        rm -f "$LOCKFILE"
+        rm -f "$BUILD_LOCKFILE"
     fi
 fi
-echo $$ > "$LOCKFILE"
+echo $$ > "$BUILD_LOCKFILE"
 
 # Helper function
 send_telegram() {
@@ -35,11 +39,11 @@ send_telegram() {
 }
 
 cleanup() {
-    rm -f "$LOCKFILE"
+    rm -f "$BUILD_LOCKFILE"
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
-            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://arsip-dev.blankonlinux.id/iso/$TODAY-$TODAY_COUNT/"
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di ${BUILD_PUBLISH_URL}/$TODAY-$TODAY_COUNT/"
         else
             # Clone failed, no commit info available
             send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON "
@@ -82,13 +86,12 @@ fi
 echo "Processing $REPO $BRANCH $COMMIT ..."
 
 ## Assume that this is in prod
-JAHITAN_PATH=/home/user/iso/jahitan
 TODAY=$(date '+%Y%m%d')
 
-TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
+TODAY_COUNT=$(ls $BUILD_JAHITAN_PATH | grep $TODAY | wc -l)
 TODAY_COUNT=$(($TODAY_COUNT + 1))
 
-TARGET_DIR=$JAHITAN_PATH/$TODAY-$TODAY_COUNT
+TARGET_DIR=$BUILD_JAHITAN_PATH/$TODAY-$TODAY_COUNT
 
 mkdir -p "$TARGET_DIR"
 sudo mkdir -p tmp || true
@@ -140,12 +143,12 @@ if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed s
   cp -v blankon-live-image-$ARCH.files $TARGET_DIR/blankon-live-image-$ARCH.files
   cp -v blankon-live-image-$ARCH.packages $TARGET_DIR/blankon-live-image-$ARCH.packages
   cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
-  zsyncmake -u "http://arsip-dev.blankonlinux.id/iso/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
+  zsyncmake -u "${BUILD_PUBLISH_URL}/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso | sed 's#  .*/#  #' > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
-  sudo rm -rf $JAHITAN_PATH/current
-  #ln -s $TARGET_DIR $JAHITAN_PATH/current
-  sudo cp -vR $TARGET_DIR $JAHITAN_PATH/current
-  sudo echo "$TODAY-$TODAY_COUNT" > $JAHITAN_PATH/current/current.txt
+  sudo rm -rf $BUILD_JAHITAN_PATH/current
+  #ln -s $TARGET_DIR $BUILD_JAHITAN_PATH/current
+  sudo cp -vR $TARGET_DIR $BUILD_JAHITAN_PATH/current
+  sudo echo "$TODAY-$TODAY_COUNT" > $BUILD_JAHITAN_PATH/current/current.txt
 fi
 
 END=$(date +%s)
