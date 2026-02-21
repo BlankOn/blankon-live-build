@@ -70,11 +70,6 @@ START=$(date +%s)
 
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
-fi
-
 ## Skip further steps if this is a build in local computer
 if [ -z "$REPO" ] || [ -z "$BRANCH" ]
 then
@@ -90,45 +85,8 @@ echo "Processing $REPO $BRANCH $COMMIT ..."
 JAHITAN_PATH=/home/user/iso/jahitan
 TODAY=$(date '+%Y%m%d')
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
-    TODAY_COUNT=$(($TODAY_COUNT + 1))
-else
-    TODAY_COUNT=$4
-fi
-
 TARGET_DIR=$JAHITAN_PATH/$TODAY-$TODAY_COUNT
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    mkdir -p $TARGET_DIR
-    sudo mkdir -p tmp || true
-    sudo chmod -R a+rw tmp
-
-    ## Preparation
-    if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
-        FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
-        exit 1
-    fi
-    # Double-check the clone succeeded by verifying .git exists
-    if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
-        FAILURE_REASON="Error: Clone directory is missing or incomplete"
-        exit 1
-    fi
-
-    # If a specific commit was passed, switch to it.
-    # If not, stay on the latest code from the branch.
-    if [ -n "$COMMIT" ]; then
-        git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
-    fi
-
-fi
-
-# Cleanup for auto update
-if [ -f "./build.sh.old" ]; then
-    sudo rm ./build.sh.old
-fi
 
 COMMIT=$(git -C ./tmp/$TODAY-$TODAY_COUNT rev-parse --short HEAD)
 CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
