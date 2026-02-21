@@ -14,3 +14,5 @@ locales
 task-indonesian-desktop
 libreoffice
 libreoffice-gtk4
+gnome-initial-setup
+virtualbox-guest-x11
