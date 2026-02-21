@@ -2,7 +2,7 @@
 set -e
 
 # Generate all UTF-8 locales (heavier but covers all switching targets)
-grep 'UTF-8' /usr/share/i18n/SUPPORTED | sed 's/ .*//' >> /etc/locale.gen
+grep 'UTF-8' /usr/share/i18n/SUPPORTED >> /etc/locale.gen
 locale-gen
 locale-gen
 
