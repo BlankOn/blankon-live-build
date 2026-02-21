@@ -1,0 +1,14 @@
+#!/bin/sh
+# Disable GDM autologin after the first session ends.
+# This runs after logout, before GDM shows the greeter again.
+# Only runs in a live session.
+
+grep -q 'boot=live' /proc/cmdline || exit 0
+
+GDM_CONF="/etc/gdm3/daemon.conf"
+
+if [ -f "$GDM_CONF" ]; then
+    sed -i '/^AutomaticLoginEnable/s/=.*$/=false/' "$GDM_CONF"
+fi
+
+exit 0
