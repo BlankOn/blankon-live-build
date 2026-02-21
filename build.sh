@@ -14,19 +14,17 @@ fi
 # Create Lockfile
 LOCKFILE="/tmp/blankon-build.lock"
 
-if [ -z "$4" ]; then
-    if [ -f "$LOCKFILE" ]; then
-        OLD_PID=$(cat "$LOCKFILE")
-        if ps -p "$OLD_PID" > /dev/null 2>&1; then
-            echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
-            exit 1
-        else
-            echo "Warning: Removing stale lock file from PID $OLD_PID"
-            rm -f "$LOCKFILE"
-        fi
+if [ -f "$LOCKFILE" ]; then
+    OLD_PID=$(cat "$LOCKFILE")
+    if ps -p "$OLD_PID" > /dev/null 2>&1; then
+        echo "Error: Build already in progress (PID: $OLD_PID). Exiting."
+        exit 1
+    else
+        echo "Warning: Removing stale lock file from PID $OLD_PID"
+        rm -f "$LOCKFILE"
     fi
-    echo $$ > "$LOCKFILE"
 fi
+echo $$ > "$LOCKFILE"
 
 # Helper function
 send_telegram() {
@@ -70,10 +68,7 @@ START=$(date +%s)
 
 sudo umount $(mount | grep live-build | cut -d ' ' -f 3) || true
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
-fi
+sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
 
 ## Skip further steps if this is a build in local computer
 if [ -z "$REPO" ] || [ -z "$BRANCH" ]
@@ -90,40 +85,33 @@ echo "Processing $REPO $BRANCH $COMMIT ..."
 JAHITAN_PATH=/home/user/iso/jahitan
 TODAY=$(date '+%Y%m%d')
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
-    TODAY_COUNT=$(($TODAY_COUNT + 1))
-else
-    TODAY_COUNT=$4
-fi
+TODAY_COUNT=$(ls $JAHITAN_PATH | grep $TODAY | wc -l)
+TODAY_COUNT=$(($TODAY_COUNT + 1))
 
 TARGET_DIR=$JAHITAN_PATH/$TODAY-$TODAY_COUNT
 
-# This is for auto update build.sh
-if [ -z "$4" ]; then
-    mkdir -p $TARGET_DIR
-    sudo mkdir -p tmp || true
-    sudo chmod -R a+rw tmp
+mkdir -p "$TARGET_DIR"
+sudo mkdir -p tmp || true
+sudo chmod -R a+rw tmp
 
-    ## Preparation
-    if ! git clone -b $BRANCH $REPO ./tmp/$TODAY-$TODAY_COUNT 2>&1; then
-        FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
-        exit 1
-    fi
-    # Double-check the clone succeeded by verifying .git exists
-    if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
-        FAILURE_REASON="Error: Clone directory is missing or incomplete"
-        exit 1
-    fi
-
-    # If a specific commit was passed, switch to it.
-    # If not, stay on the latest code from the branch.
-    if [ -n "$COMMIT" ]; then
-        git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
-    fi
-
+## Preparation
+if ! git clone -b "$BRANCH" "$REPO" "./tmp/$TODAY-$TODAY_COUNT" 2>&1; then
+    FAILURE_REASON="Error: Failed to clone $REPO branch $BRANCH"
+    exit 1
 fi
+# Double-check the clone succeeded by verifying .git exists
+if [ ! -d "./tmp/$TODAY-$TODAY_COUNT/.git" ]; then
+    FAILURE_REASON="Error: Clone directory is missing or incomplete"
+    exit 1
+fi
+
+# If a specific commit was passed, switch to it.
+# If not, stay on the latest code from the branch.
+if [ -n "$COMMIT" ]; then
+    git -C ./tmp/$TODAY-$TODAY_COUNT checkout $COMMIT
+fi
+
+
 
 # Cleanup for auto update
 if [ -f "./build.sh.old" ]; then
@@ -163,8 +151,8 @@ fi
 END=$(date +%s)
 DURATION=$((END - START))
 TOTAL_DURATION="Done in $(date -d@$DURATION -u +%H:%M:%S)."
-echo $TOTAL_DURATION
-echo $TOTAL_DURATION >> blankon-live-image-$ARCH.build.log
+echo "$TOTAL_DURATION"
+echo "$TOTAL_DURATION" >> blankon-live-image-$ARCH.build.log
 tail -n 100 blankon-live-image-$ARCH.build.log > $TARGET_DIR/blankon-live-image-$ARCH.tail100.build.log.txt
 cp -v blankon-live-image-$ARCH.build.log $TARGET_DIR/blankon-live-image-$ARCH.build.log.txt
 
