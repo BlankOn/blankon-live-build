@@ -39,7 +39,7 @@ cleanup() {
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
-            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://arsip-dev.blankonlinux.id/iso/jahitan/$TODAY-$TODAY_COUNT/"
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://arsip-dev.blankonlinux.id/iso/$TODAY-$TODAY_COUNT/"
         else
             # Clone failed, no commit info available
             send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON "
