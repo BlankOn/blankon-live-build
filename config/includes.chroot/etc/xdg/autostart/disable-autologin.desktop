@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Disable GDM Autologin
+Exec=/usr/lib/blankon/disable-autologin.sh
+NoDisplay=true
+X-GNOME-Autostart-Phase=Applications

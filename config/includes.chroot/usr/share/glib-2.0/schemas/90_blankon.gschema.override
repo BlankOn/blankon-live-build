@@ -1,3 +1,6 @@
+[org.gnome.shell]
+enabled-extensions=['no-overview@fthx', 'praya@blankonlinux.id', 'tilingshell@ferrarodomenico.com']
+
 [org.gnome.desktop.interface]
 icon-theme='Adwaita'
 

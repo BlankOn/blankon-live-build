@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-# Generate all UTF-8 locales (heavier but covers all switching targets)
-grep 'UTF-8' /usr/share/i18n/SUPPORTED | sed 's/ .*//' >> /etc/locale.gen
-locale-gen
+# Generate only essential locales (fewer = faster ldconfig on live boot)
+echo "id_ID.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 
 # Do NOT set LANG in /etc/environment - this overrides AccountsService
