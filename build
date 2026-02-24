@@ -72,7 +72,7 @@ START=$(date +%s)
 
 sudo umount "$(mount | grep live-build | cut -d ' ' -f 3)" || true
 
-sudo rm -rf ./chroot ./local ./cache ./build ./tmp || true
+sudo rm -rf ./chroot ./local ./cache ./tmp || true
 
 ## Skip further steps if this is a build in local computer
 if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
@@ -112,13 +112,6 @@ fi
 # If not, stay on the latest code from the branch.
 if [[ -n "$COMMIT" ]]; then
     git -C "./tmp/$TODAY-$TODAY_COUNT" checkout "$COMMIT"
-fi
-
-
-
-# Cleanup for auto update
-if [[ -f "./build.sh.old" ]]; then
-    sudo rm ./build.sh.old
 fi
 
 COMMIT=$(git -C "./tmp/$TODAY-$TODAY_COUNT" rev-parse --short HEAD)
