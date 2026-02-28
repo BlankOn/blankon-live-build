@@ -64,3 +64,5 @@ rygel-playbin
 gnome-color-manager
 gnome-shell-extension-manager
 gnome-backgrounds
+hicolor-icon-theme
+console-setup
