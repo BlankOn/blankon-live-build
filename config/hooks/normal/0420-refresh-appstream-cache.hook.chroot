@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+# Refresh AppStream metadata cache.
+#
+# This pre-populates the AppStream cache so that GNOME Software
+# loads faster in the live session.
+
+if command -v appstreamcli >/dev/null
+then
+	apt-get update
+	appstreamcli refresh --force
+fi
