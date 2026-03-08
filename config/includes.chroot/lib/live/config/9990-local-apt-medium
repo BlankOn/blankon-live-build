@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+
+list=/etc/apt/sources.list.d/live-medium.list
+suite=${VERSION_CODENAME:-}
+
+if [ -z "$suite" ] && [ -r /etc/os-release ]; then
+	. /etc/os-release
+	suite=${VERSION_CODENAME:-}
+fi
+
+if [ -z "$suite" ] && [ -d /run/live/medium/dists ]; then
+	set -- /run/live/medium/dists/*
+	if [ -e "$1" ]; then
+		suite=${1##*/}
+	fi
+fi
+
+if [ -z "$suite" ] || [ ! -d "/run/live/medium/dists/$suite" ]; then
+	rm -f "$list"
+	exit 0
+fi
+
+cat > "$list" <<EOF
+deb [trusted=yes] file:/run/live/medium $suite main restricted extras restricted-firmware
+EOF
