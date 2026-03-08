@@ -1,3 +1,1 @@
 deb [trusted=yes] file:/run/live/medium verbeek main restricted extras restricted-firmware
-deb http://arsip-dev.blankonlinux.id/dev/ verbeek main restricted extras restricted-firmware
-deb-src http://arsip-dev.blankonlinux.id/dev/ verbeek main restricted extras restricted-firmware
