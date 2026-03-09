@@ -14,4 +14,4 @@ dosfstools
 librsvg2-bin
 alsa-utils
 linux-headers-amd64
-rust-zram-generator
+systemd-zram-generator
