@@ -1,2 +1,0 @@
-Acquire::Check-Valid-Until "false";
-APT::Get::AllowUnauthenticated "true";
