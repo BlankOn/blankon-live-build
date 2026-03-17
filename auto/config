@@ -1,0 +1,34 @@
+#!/bin/sh
+# live-build configuration script
+# see 'man lb config'
+
+blankon_mirror=http://arsip-dev.blankonlinux.id/dev/
+dist=verbeek
+
+lb config noauto \
+  --apt-indices=false \
+  --distribution "$dist" \
+  --debian-installer-distribution "$dist" \
+  --archive-areas 'main extras restricted restricted-firmware' \
+  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg" \
+  --keyring-packages blankon-keyring \
+  --updates false \
+  --backports false \
+  --source false \
+  --firmware-binary true \
+  --firmware-chroot true \
+  --mirror-bootstrap "$blankon_mirror" \
+  --mirror-debian-installer "$blankon_mirror" \
+  --mirror-binary "$blankon_mirror" \
+  --iso-application "BlankOn Linux" \
+  --iso-publisher "BlankOn" \
+  --iso-volume "BlankOn Live" \
+  --linux-packages linux-image \
+  --memtest memtest86+ \
+  --bootappend-live "boot=live components quiet splash noeject" \
+  --bootappend-live-failsafe "boot=live components noeject memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=normal" \
+  --bootappend-install "net.ifnames=0" \
+  --security false \
+  --win32-loader false \
+  $lb_opts \
+  "$@"
