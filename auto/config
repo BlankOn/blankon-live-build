@@ -8,7 +8,6 @@ dist=verbeek
 lb config noauto \
   --apt-indices=false \
   --distribution "$dist" \
-  --debian-installer-distribution "$dist" \
   --archive-areas 'main extras restricted restricted-firmware' \
   --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg" \
   --keyring-packages blankon-keyring \
