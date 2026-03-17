@@ -79,7 +79,7 @@ if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
 then
   sudo lb clean
   sudo lb config --architectures $ARCH
-  sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
+  sudo time lb build 2>&1 | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
 fi
 
@@ -88,7 +88,7 @@ echo "Processing $REPO $BRANCH $COMMIT ..."
 ## Assume that this is in prod
 TODAY=$(date '+%Y%m%d')
 
-TODAY_COUNT=$(ls $BUILD_JAHITAN_PATH | grep "$TODAY" | wc -l)
+TODAY_COUNT=$(ls "$BUILD_JAHITAN_PATH" | grep "$TODAY" | wc -l)
 TODAY_COUNT=$(("$TODAY_COUNT" + 1))
 
 TARGET_DIR=$BUILD_JAHITAN_PATH/$TODAY-$TODAY_COUNT
@@ -118,15 +118,16 @@ COMMIT=$(git -C "./tmp/$TODAY-$TODAY_COUNT" rev-parse --short HEAD)
 CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
 COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
 mkdir -p "./tmp/$TODAY-$TODAY_COUNT"
-sudo rm -rf config
+sudo rm -rf config auto
 sudo cp -vR "./tmp/$TODAY-$TODAY_COUNT/config" config
+sudo cp -vR "./tmp/$TODAY-$TODAY_COUNT/auto" auto
 sudo sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_common/splash.svg
 
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
 sudo rm -rf blankon-live-image-$ARCH.build.log
-sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
+sudo time lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
 if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
   RESULT="telah terbit ✅"
