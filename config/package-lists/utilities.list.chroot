@@ -4,3 +4,6 @@ jq
 tar
 wget
 htop
+git
+netcat-openbsd
+openssh-client
