@@ -1,0 +1,12 @@
+services:
+  builder:
+    build: .
+    container_name: blankon-builder
+    privileged: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/build
+      - ${HOST_JAHITAN_PATH}:/jahitan
+    env_file:
+      - .env
