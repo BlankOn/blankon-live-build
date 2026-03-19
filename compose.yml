@@ -7,6 +7,10 @@ services:
     tty: true
     volumes:
       - .:/build
+      - build-workspace:/workspace
       - ${HOST_JAHITAN_PATH}:/jahitan
     env_file:
       - .env
+
+volumes:
+  build-workspace:

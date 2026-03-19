@@ -29,6 +29,9 @@ if [[ ! -f /.dockerenv ]]; then
     exit $?
 fi
 
+# Run lb in /workspace to keep build artifacts out of the host bind-mount
+cd /workspace
+
 if [[ -f "$BUILD_LOCKFILE" ]]; then
     OLD_PID=$(cat "$BUILD_LOCKFILE")
     if ps -p "$OLD_PID" > /dev/null 2>&1; then
@@ -88,6 +91,8 @@ sudo rm -rf ./chroot ./local ./cache ./tmp || true
 ## Skip further steps if this is a build in local computer
 if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
 then
+  cp -rn /build/config . 2>/dev/null || true
+  cp -rn /build/auto . 2>/dev/null || true
   sudo lb clean
   sudo lb config --architectures $ARCH
   sudo lb build 2>&1 | sudo tee -a blankon-live-image-$ARCH.build.log
