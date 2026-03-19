@@ -12,10 +12,21 @@ MISSING_VARS=""
 [[ -z "$BUILD_LOCKFILE" ]] && MISSING_VARS="$MISSING_VARS BUILD_LOCKFILE"
 [[ -z "$BUILD_JAHITAN_PATH" ]] && MISSING_VARS="$MISSING_VARS BUILD_JAHITAN_PATH"
 [[ -z "$BUILD_PUBLISH_URL" ]] && MISSING_VARS="$MISSING_VARS BUILD_PUBLISH_URL"
+[[ -z "$HOST_JAHITAN_PATH" ]] && MISSING_VARS="$MISSING_VARS HOST_JAHITAN_PATH"
 if [[ -n "$MISSING_VARS" ]]; then
   echo "Error: The following environment variables are missing:$MISSING_VARS"
   echo "Please check your .env file."
   exit 1
+fi
+
+# If not running inside Docker, spin up the container and re-invoke
+if [[ ! -f /.dockerenv ]]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if ! docker ps --filter "name=blankon-builder" --filter "status=running" -q | grep -q .; then
+        docker compose -f "$SCRIPT_DIR/compose.yml" up -d --build
+    fi
+    docker compose -f "$SCRIPT_DIR/compose.yml" exec -T builder /build/build-iso "$@"
+    exit $?
 fi
 
 if [[ -f "$BUILD_LOCKFILE" ]]; then
