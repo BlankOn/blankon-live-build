@@ -9,67 +9,52 @@ References:
 * [Debian Live Build](https://www.debian.org/devel/debian-live/)
 * [Debian Live Build Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html)
 
-## Prerequisites and preparation
+## Prerequisites
 
-Need live-build version **20230502** or commit sha on `dd916ac5be9428ff79a28fb6343f5d244acca438`
+- Docker
+- Docker Compose
 
-### Install tools:
-```
-sudo apt install debootstrap make git apt-utils
-git clone https://salsa.debian.org/live-team/live-build.git debian-live-build
-cd debian-live-build
-git checkout 7360d50fa6b
-sudo make install
-sudo lb --version
-```
+## Setup
 
-### Clone Repo and Preparation
+1. Clone repo
+   ```
+   git clone https://github.com/BlankOn/blankon-live-build.git
+   cd blankon-live-build
+   ```
 
-- Clone repo
-  ```
-  git clone https://github.com/BlankOn/blankon-live-build.git
-  ```
-- Install blankon-keyring
-  ```
-  cd blankon-live-build
-  sudo dpkg -i config/packages/blankon-keyring_2020.10.29-1.0_all.deb
-  ```
-- Create file `/usr/share/debootstrap/scripts/verbeek` with this content
-  ```
-  mirror_style release
-  download_style apt
-  finddebs_style from-indices
-  variants - buildd fakechroot minbase
-  keyring /usr/share/keyrings/blankon-archive-keyring.gpg
+2. Copy and fill in the environment file
+   ```
+   cp .env.example .env
+   ```
 
-  # include common settings
-  if [ -e "$DEBOOTSTRAP_DIR/scripts/debian-common" ]; then
-   . "$DEBOOTSTRAP_DIR/scripts/debian-common"
-  elif [ -e /debootstrap/debian-common ]; then
-   . /debootstrap/debian-common
-  elif [ -e "$DEBOOTSTRAP_DIR/debian-common" ]; then
-   . "$DEBOOTSTRAP_DIR/debian-common"
-  else
-   error 1 NOCOMMON "File not found: debian-common"
-  fi
-  ```
-- Create symlink in host files to satisfy udeb packages (?) [see this issue](https://github.com/BlankOn/Verbeek/issues/134). 
-  (no need symlink if you're using docker for building images)
-  ```
-  sudo ln -s /usr/share/live/build/data/debian-cd/squeeze /usr/share/live/build/data/debian-cd/verbeek
-  ```
+   | Variable | Description |
+   |---|---|
+   | `TELEGRAM_BOT_KEY` | Telegram bot token for build notifications |
+   | `HOST_JAHITAN_PATH` | Host directory where ISO output will be stored |
+   | `BUILD_PUBLISH_URL` | Public URL where ISOs are served |
+   | `BUILD_JAHITAN_PATH` | Path inside the container for ISO output (default: `/jahitan`) |
+   | `BUILD_LOCKFILE` | Lockfile path inside the container (default: `/tmp/blankon-build.lock`) |
+
+3. Create the jahitan output directory on the host
+   ```
+   mkdir -p /your/jahitan/path
+   ```
+
 ## Build
 
-- `sudo lb clean --purge`
-- `sudo lb config`
-- `sudo lb build`
+`build-iso` automatically manages the Docker container — no manual Docker setup needed.
 
-There is `build.sh` script that could be used to export the result to BlankOn's jahitan-harian directory.
+**Production build** (pulls config from a git branch):
+```
+./build-iso <repo-url> <branch> [commit]
+```
 
-Simple way
+**Local build** (uses the `config/` and `auto/` in this repo):
 ```
-bash build.sh
+./build-iso
 ```
+
+Build artifacts (chroot, cache, tmp) stay inside the container. ISO output is written to `HOST_JAHITAN_PATH` on the host.
 
 ## TODO
 
