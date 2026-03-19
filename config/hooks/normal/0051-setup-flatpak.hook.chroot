@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+# Add Flathub as a system-wide flatpak remote
+flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
