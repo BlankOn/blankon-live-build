@@ -22,6 +22,7 @@ lb config noauto \
   --iso-application "BlankOn Linux" \
   --iso-publisher "BlankOn" \
   --iso-volume "BlankOn Live" \
+  --image-name blankon-live-image \
   --linux-packages linux-image \
   --bootappend-live "boot=live components quiet splash noeject" \
   --bootappend-live-failsafe "boot=live components noeject memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=normal" \
