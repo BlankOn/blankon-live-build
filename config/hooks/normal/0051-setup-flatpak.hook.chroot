@@ -2,5 +2,5 @@
 
 set -e
 
-# Add Flathub as a system-wide flatpak remote
-flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
+# Enable the Flathub remote service so it runs on first boot
+systemctl enable flatpak-add-flathub.service
