@@ -1,3 +1,6 @@
 calamares
 calamares-settings-blankon
 gparted
+cryptsetup-initramfs
+cryptsetup
+keyutils
