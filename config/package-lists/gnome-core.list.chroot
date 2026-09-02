@@ -36,7 +36,6 @@ simple-scan
 gnome-snapshot
 yelp
 cups
-fonts-adwaita
 fonts-cantarell
 gstreamer1.0-packagekit
 gstreamer1.0-plugins-base
@@ -52,7 +51,6 @@ libpam-gnome-keyring
 pipewire-audio
 system-config-printer-common
 system-config-printer-udev
-totem-video-thumbnailer
 zenity
 firefox
 gnome-remote-desktop
