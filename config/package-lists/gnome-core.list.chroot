@@ -52,13 +52,10 @@ pipewire-audio
 system-config-printer-common
 system-config-printer-udev
 zenity
-firefox
 gnome-remote-desktop
 gnome-user-share
 locales-all
 network-manager
-rygel-localsearch
-rygel-playbin
 gnome-color-manager
 gnome-shell-extension-manager
 gnome-backgrounds
