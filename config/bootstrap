@@ -4,25 +4,25 @@
 LB_ARCHITECTURE="amd64"
 
 # Select distribution to use
-LB_DISTRIBUTION="verbeek"
+LB_DISTRIBUTION="sinambung"
 
 # Select parent distribution to use
-LB_PARENT_DISTRIBUTION="verbeek"
+LB_PARENT_DISTRIBUTION="sinambung"
 
 # Select distribution to use in the chroot
-LB_DISTRIBUTION_CHROOT="verbeek"
+LB_DISTRIBUTION_CHROOT="sinambung"
 
 # Select parent distribution to use in the chroot
-LB_PARENT_DISTRIBUTION_CHROOT="verbeek"
+LB_PARENT_DISTRIBUTION_CHROOT="sinambung"
 
 # Select distribution to use in the final image
-LB_DISTRIBUTION_BINARY="verbeek"
+LB_DISTRIBUTION_BINARY="sinambung"
 
 # Select parent distribution to use in the final image
-LB_PARENT_DISTRIBUTION_BINARY="verbeek"
+LB_PARENT_DISTRIBUTION_BINARY="sinambung"
 
 # Select parent distribution for debian-installer to use
-LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
+LB_PARENT_DEBIAN_INSTALLER_DISTRIBUTION="sinambung"
 
 # Select archive areas to use
 LB_ARCHIVE_AREAS="main extras restricted restricted-firmware"
@@ -31,40 +31,40 @@ LB_ARCHIVE_AREAS="main extras restricted restricted-firmware"
 LB_PARENT_ARCHIVE_AREAS="main restricted extras restricted-firmware"
 
 # Set parent mirror to bootstrap from
-LB_PARENT_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set security parent mirror to fetch packages from
-LB_PARENT_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set security parent mirror which ends up in the image
-LB_PARENT_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set debian-installer parent mirror
-LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/"
+LB_PARENT_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set mirror to bootstrap from
-LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_BOOTSTRAP="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set mirror to fetch packages from
-LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_CHROOT="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set security mirror to fetch packages from
-LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_CHROOT_SECURITY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set mirror which ends up in the image
-LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_BINARY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set security mirror which ends up in the image
-LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_BINARY_SECURITY="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set debian-installer mirror
-LB_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/dev/"
+LB_MIRROR_DEBIAN_INSTALLER="http://arsip-dev.blankonlinux.id/sinambung/"
 
 # Set architectures to use foreign bootstrap
 LB_BOOTSTRAP_QEMU_ARCHITECTURE=""

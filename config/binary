@@ -41,7 +41,7 @@ LB_BUILD_WITH_CHROOT="true"
 LB_DEBIAN_INSTALLER="none"
 
 # Set debian-installer suite
-LB_DEBIAN_INSTALLER_DISTRIBUTION="verbeek"
+LB_DEBIAN_INSTALLER_DISTRIBUTION="sinambung"
 
 # Set debian-installer preseed filename/url
 LB_DEBIAN_INSTALLER_PRESEEDFILE=""
@@ -68,7 +68,7 @@ LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/liv
 LB_ISO_PUBLISHER="BlankOn Revival Project; https://blankon.github.io"
 
 # Set iso volume (max 32 chars)
-LB_ISO_VOLUME="BlankOn verbeek 20201031-18:55"
+LB_ISO_VOLUME="BlankOn sinambung 20201031-18:55"
 
 # Set jffs2 eraseblock size
 LB_JFFS2_ERASEBLOCK=""

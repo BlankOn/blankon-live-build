@@ -34,7 +34,7 @@ sudo lb --version
   cd blankon-live-build
   sudo dpkg -i config/packages/blankon-keyring_2020.10.29-1.0_all.deb
   ```
-- Create file `/usr/share/debootstrap/scripts/verbeek` with this content
+- Create file `/usr/share/debootstrap/scripts/sinambung` with this content
   ```
   mirror_style release
   download_style apt
@@ -56,7 +56,7 @@ sudo lb --version
 - Create symlink in host files to satisfy udeb packages (?) [see this issue](https://github.com/BlankOn/Verbeek/issues/134). 
   (no need symlink if you're using docker for building images)
   ```
-  sudo ln -s /usr/share/live/build/data/debian-cd/squeeze /usr/share/live/build/data/debian-cd/verbeek
+  sudo ln -s /usr/share/live/build/data/debian-cd/squeeze /usr/share/live/build/data/debian-cd/sinambung
   ```
 ## Build
 
