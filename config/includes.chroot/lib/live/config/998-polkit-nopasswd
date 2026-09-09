@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# live-config(7) component: make PolicyKit prompt-free in the live session.
+#
+# live-config ships 1080-policykit, which writes an equivalent rule to
+# /usr/share/polkit-1/rules.d/. That rule also requires subject.active, so any
+# session logind does not mark active still gets password prompts. This
+# component drops the active check and takes precedence via /etc/polkit-1.
+#
+# It only ever runs in a live session (live-config is not started otherwise)
+# and writes to the overlay, so an installed system is unaffected.
+
+set -eu
+
+. /usr/lib/live/init-config.sh
+
+for _PARAMETER in $(cat /proc/cmdline)
+do
+	case "${_PARAMETER}" in
+		live-config.noroot|noroot)
+			exit 0
+			;;
+
+		live-config.username=*|username=*)
+			LIVE_USERNAME="${_PARAMETER#*username=}"
+			;;
+	esac
+done
+
+[ -n "${LIVE_USERNAME}" ] || exit 0
+
+mkdir -p /etc/polkit-1/rules.d
+
+cat > /etc/polkit-1/rules.d/10-blankon-live.rules << EOF
+// Grant the live user administrative access without a password prompt.
+polkit.addRule(function(action, subject) {
+	if (subject.local &&
+		subject.user === "${LIVE_USERNAME}" &&
+		subject.isInGroup("sudo")) {
+		return polkit.Result.YES;
+	}
+});
+EOF
