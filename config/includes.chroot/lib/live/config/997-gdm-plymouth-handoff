@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# live-config(7) component: stop Plymouth from stealing the VT from the
+# GDM autologin session.
+#
+# On a live boot GDM logs blankon in automatically, which puts the session on
+# tty2, while Plymouth still owns tty1 in VT_PROCESS mode and refuses the VT
+# switch. GDM renders the desktop on tty2 but never gets to show it; ~18s later
+# plymouthd gives up and exits, tty1 becomes the active VT with nothing on it,
+# and GDM reacts to that VT change by spawning a greeter there. The user ends
+# up staring at a login screen backed by a session that is already running, and
+# because the real session is then Active=no, polkit's live rule (which tests
+# subject.active) stops applying and every privileged action asks for a
+# password.
+#
+# Quitting Plymouth before GDM starts removes the VT_PROCESS holder, so the
+# autologin session gets tty2 activated normally and no greeter is created.
+#
+# This only ever runs in a live session and writes to /run, so an installed
+# system keeps the normal Plymouth-to-GDM handoff.
+
+set -eu
+
+[ -x /usr/bin/plymouth ] || exit 0
+[ -e /usr/lib/systemd/system/gdm.service ] || exit 0
+
+mkdir -p /run/systemd/system/gdm.service.d
+
+cat > /run/systemd/system/gdm.service.d/10-quit-plymouth.conf << 'EOF'
+[Service]
+ExecStartPre=-/usr/bin/plymouth quit
+EOF
+
+systemctl daemon-reload
