@@ -11,6 +11,66 @@ if [ -z "$TELEGRAM_BOT_KEY" ]; then
   exit 1
 fi
 
+# Load the archive configuration. This is the single place the development /
+# production archive is selected; see the comments in the file itself.
+ARCHIVE_CONF="config/includes.chroot/etc/blankon/archive.conf"
+
+if [ ! -r "$ARCHIVE_CONF" ]; then
+  echo "Error: $ARCHIVE_CONF is missing. Cannot determine which archive to build from."
+  exit 1
+fi
+
+source "$ARCHIVE_CONF"
+
+if [ -z "$ARCHIVE_HOST" ] || [ -z "$ARCHIVE_URI" ]; then
+  echo "Error: $ARCHIVE_CONF did not define ARCHIVE_HOST and ARCHIVE_URI."
+  exit 1
+fi
+
+# "lb config" regenerates config/bootstrap from its own defaults plus whatever
+# it reads back out of the existing file, so the mirrors have to be reapplied
+# afterwards rather than hand-maintained in config/bootstrap.
+#
+# The daily build replaces config/ wholesale with the clone it just made, so
+# re-read archive.conf here instead of trusting the copy loaded at startup:
+# the archive the built branch asks for is the one that must win.
+apply_archive_config() {
+  local conf="config/bootstrap"
+
+  if [ ! -r "$ARCHIVE_CONF" ]; then
+    echo "Error: $ARCHIVE_CONF is missing. Cannot determine which archive to build from."
+    exit 1
+  fi
+
+  source "$ARCHIVE_CONF"
+
+  if [ -z "$ARCHIVE_HOST" ] || [ -z "$ARCHIVE_URI" ]; then
+    echo "Error: $ARCHIVE_CONF did not define ARCHIVE_HOST and ARCHIVE_URI."
+    exit 1
+  fi
+
+  if [ ! -f "$conf" ]; then
+    echo "Error: $conf is missing; cannot apply the archive configuration."
+    exit 1
+  fi
+
+  # config/ is root-owned after the daily build copies it into place, so the
+  # rewrite goes through sudo regardless of who is running the build.
+  sudo sed -i -E \
+    "s#^(LB_(PARENT_)?MIRROR_[A-Z_]+=)\".*\"#\\1\"${ARCHIVE_URI}\"#" \
+    "$conf"
+
+  local applied
+  applied=$(grep -cE "^LB_(PARENT_)?MIRROR_[A-Z_]+=\"${ARCHIVE_URI}\"" "$conf" | tr -d ' ')
+
+  if [ "$applied" -eq 0 ]; then
+    echo "Error: no mirror entries in $conf were set to $ARCHIVE_URI."
+    exit 1
+  fi
+
+  echo "Pointed $applied mirror entries in $conf at $ARCHIVE_URI"
+}
+
 # Create Lockfile
 LOCKFILE="/tmp/blankon-build.lock"
 
@@ -41,7 +101,7 @@ cleanup() {
     if [ -n "$REPO" ] && [ -n "$BRANCH" ]; then
         if [ -n "$COMMIT_URL" ]; then
             # Clone succeeded, we have commit info
-            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://arsip-dev.blankonlinux.id/iso/jahitan/$TODAY-$TODAY_COUNT/"
+            send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT [ revisi <a href=\\\"$COMMIT_URL\\\">$COMMIT</a> ] dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON $ACTION di http://$ARCHIVE_HOST/iso/jahitan/$TODAY-$TODAY_COUNT/"
         else
             # Clone failed, no commit info available
             send_telegram "💿 Jahitan harian $TODAY-$TODAY_COUNT dari $REPO_NAME cabang $BRANCH $RESULT. $FAILURE_REASON "
@@ -75,6 +135,7 @@ if [ -z "$REPO" ] || [ -z "$BRANCH" ]
 then
   sudo lb clean
   sudo lb config --architectures $ARCH
+apply_archive_config
   sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
 fi
@@ -99,6 +160,7 @@ sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_co
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
+apply_archive_config
 sudo rm -rf blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
@@ -110,7 +172,7 @@ if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed s
   cp -v blankon-live-image-$ARCH.files $TARGET_DIR/blankon-live-image-$ARCH.files
   cp -v blankon-live-image-$ARCH.packages $TARGET_DIR/blankon-live-image-$ARCH.packages
   cp -v blankon-live-image-$ARCH.hybrid.iso $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
-  zsyncmake -u "http://arsip-dev.blankonlinux.id/iso/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
+  zsyncmake -u "http://$ARCHIVE_HOST/iso/current/blankon-live-image-amd64.hybrid.iso" -o $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso
   sha256sum $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso | sed 's#  .*/#  #' > $TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum
   sudo rm -rf $JAHITAN_PATH/current
   #ln -s $TARGET_DIR $JAHITAN_PATH/current
