@@ -18,6 +18,53 @@ if [[ -n "$MISSING_VARS" ]]; then
   exit 1
 fi
 
+# Which archive the ISO is built from, and the archive the installed system
+# is pointed at, both come from this file; see the comments in it.
+ARCHIVE_CONF="config/includes.chroot/etc/blankon/archive.conf"
+
+# "lb config" regenerates config/bootstrap, discarding any mirror values kept
+# there, so they are reapplied from ARCHIVE_CONF after every call.
+#
+# The daily build replaces config/ wholesale with the branch it just cloned,
+# so ARCHIVE_CONF is re-read on each call rather than once at startup: the
+# archive that branch asks for is the one that has to win.
+apply_archive_config() {
+  local conf="config/bootstrap"
+
+  if [[ ! -r "$ARCHIVE_CONF" ]]; then
+    echo "Error: $ARCHIVE_CONF is missing. Cannot determine which archive to build from."
+    exit 1
+  fi
+
+  source "$ARCHIVE_CONF"
+
+  if [[ -z "$ARCHIVE_URI" ]]; then
+    echo "Error: $ARCHIVE_CONF did not define ARCHIVE_URI."
+    exit 1
+  fi
+
+  if [[ ! -f "$conf" ]]; then
+    echo "Error: $conf is missing; cannot apply the archive configuration."
+    exit 1
+  fi
+
+  # config/ is root-owned once the daily build copies it into place, so the
+  # rewrite goes through sudo regardless of who is running the build.
+  sudo sed -i -E \
+    "s#^(LB_(PARENT_)?MIRROR_[A-Z_]+=)\".*\"#\\1\"${ARCHIVE_URI}\"#" \
+    "$conf"
+
+  local applied
+  applied=$(grep -cE "^LB_(PARENT_)?MIRROR_[A-Z_]+=\"${ARCHIVE_URI}\"" "$conf")
+
+  if [[ "$applied" -eq 0 ]]; then
+    echo "Error: no mirror entries in $conf were set to $ARCHIVE_URI."
+    exit 1
+  fi
+
+  echo "Pointed $applied mirror entries in $conf at $ARCHIVE_URI"
+}
+
 if [[ -f "$BUILD_LOCKFILE" ]]; then
     OLD_PID=$(cat "$BUILD_LOCKFILE")
     if ps -p "$OLD_PID" > /dev/null 2>&1; then
@@ -79,7 +126,8 @@ if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
 then
   sudo lb clean
   sudo lb config --architectures $ARCH
-  sudo time lb build | sudo tee -a blankon-live-image-$ARCH.build.log
+  apply_archive_config
+  sudo time lb build --debug | sudo tee -a blankon-live-image-$ARCH.build.log
   exit $?
 fi
 
@@ -125,6 +173,7 @@ sudo sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslin
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
+apply_archive_config
 sudo rm -rf blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
