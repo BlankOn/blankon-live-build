@@ -16,3 +16,4 @@ alsa-utils
 linux-headers-amd64
 systemd-zram-generator
 earlyoom
+blankres
