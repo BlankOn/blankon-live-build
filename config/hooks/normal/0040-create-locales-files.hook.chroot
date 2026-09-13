@@ -6,8 +6,9 @@ echo "id_ID.UTF-8 UTF-8" >> /etc/locale.gen
 echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
 
-# Do NOT set LANG in /etc/environment - this overrides AccountsService
-# Only set PATH or other non-locale vars here if needed
+# Keep LANG out of /etc/environment; the locale belongs in
+# /etc/default/locale alone, so a later desktop install can override it
+# per-user. Only PATH and other non-locale vars belong here.
 cat > /etc/environment << 'EOF'
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 EOF
@@ -16,13 +17,4 @@ EOF
 cat > /etc/default/locale << 'EOF'
 LANG=id_ID.UTF-8
 LANGUAGE=id_ID:id
-EOF
-
-# Set AccountsService default for live user
-mkdir -p /var/lib/AccountsService/users
-cat > /var/lib/AccountsService/users/blankon << 'EOF'
-[User]
-Language=id_ID.UTF-8
-XSession=gnome
-SystemAccount=false
 EOF

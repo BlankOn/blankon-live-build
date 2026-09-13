@@ -10,7 +10,7 @@ LB_BINARY_FILESYSTEM="fat32"
 LB_APT_INDICES="true"
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE="boot=live components quiet splash username=blankon hostname=blankon user-fullname=BlankOn nottyautologin"
+LB_BOOTAPPEND_LIVE="boot=live components username=blankon hostname=blankon user-fullname=BlankOn"
 
 # Set boot parameters
 LB_BOOTAPPEND_INSTALL=""
@@ -59,7 +59,7 @@ LB_HDD_SIZE="auto"
 LB_HDD_PARTITION_START=""
 
 # Set iso author
-LB_ISO_APPLICATION="BlankOn Live"
+LB_ISO_APPLICATION="BlankOn Live Minimal"
 
 # Set iso preparer
 LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/live-build"
@@ -68,7 +68,7 @@ LB_ISO_PREPARER="live-build @LB_VERSION@; https://salsa.debian.org/live-team/liv
 LB_ISO_PUBLISHER="BlankOn Revival Project; https://blankon.github.io"
 
 # Set iso volume (max 32 chars)
-LB_ISO_VOLUME="BlankOn sinambung 20201031-18:55"
+LB_ISO_VOLUME="BlankOn sinambung minimal"
 
 # Set jffs2 eraseblock size
 LB_JFFS2_ERASEBLOCK=""

@@ -1,5 +1,11 @@
 # BlankOn live-build
 
+> **This branch (`edge`) builds the minimal console image.**
+> It carries no desktop and no installer: the live session boots to a text
+> console with networking, and installing to disk is out of scope for this
+> variant. The full GNOME image lives on the desktop branches. See
+> [BlankOn/revival#107](https://github.com/BlankOn/revival/issues/107).
+
 This is repository for BlankOn live-build configuration. Before migrated to live-build, Blankon used to build the ISOs using custom-made script called [pabrik-cc](https://github.com/BlankOn/pabrik-cc) based on old debootstrap.
 
 The Debian Live project produces the framework used to build live systems based on Debian and the official Debian Live images themselves.

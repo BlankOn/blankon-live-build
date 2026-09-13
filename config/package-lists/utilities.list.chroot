@@ -1,11 +1,14 @@
 vim
+nano
+less
 curl
+wget
 jq
 tar
-wget
 htop
 git
+rsync
+ca-certificates
+bash-completion
 netcat-openbsd
 openssh-client
-flatpak
-gnome-software-plugin-flatpak
