@@ -18,3 +18,4 @@ systemd-zram-generator
 earlyoom
 blankres
 systemd-timesyncd
+polkit-kde-agent-1
