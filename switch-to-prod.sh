@@ -1,4 +1,3 @@
-```bash
 #!/usr/bin/env bash
 
 set -euo pipefail
@@ -55,5 +54,3 @@ fi
 grep '^ARCHIVE_HOST=' "$ARCHIVE_CONF"
 echo "✓ ARCHIVE_HOST points at the production archive."
 echo "✓ DAILY_BUILD removed from the production splash screen."
-```
-
