@@ -16,6 +16,5 @@ alsa-utils
 linux-headers-amd64
 systemd-zram-generator
 earlyoom
-blankres
 systemd-timesyncd
 polkit-kde-agent-1
