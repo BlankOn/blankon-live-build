@@ -3,13 +3,16 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 SPLASH="${ROOT_DIR}/config/bootloaders/syslinux_common/splash.svg"
 
 echo "Switching development configuration to production..."
 echo
 
-# Replace arsip-dev with arsip in all files.
-grep -rl --exclude-dir=.git 'arsip-dev' "$ROOT_DIR" | while IFS= read -r file; do
+cd "$ROOT_DIR"
+
+# Replace arsip-dev with arsip in tracked files.
+git grep -l 'arsip-dev' -- ':!'"$SCRIPT_NAME" | while IFS= read -r file; do
     echo "Updating: ${file}"
     sed -i 's/arsip-dev/arsip/g' "$file"
 done
@@ -26,8 +29,8 @@ echo
 echo "Production switch complete."
 echo
 
-# Verify.
-if grep -R --exclude-dir=.git -n 'arsip-dev' "$ROOT_DIR"; then
+# Verify tracked files only.
+if git grep -n 'arsip-dev' -- ':!'"$SCRIPT_NAME"; then
     echo
     echo "WARNING: Some arsip-dev references still remain."
 else
