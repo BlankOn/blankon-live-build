@@ -3,53 +3,34 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_PATH="${ROOT_DIR}/$(basename "${BASH_SOURCE[0]}")"
-SPLASH="${ROOT_DIR}/config/bootloaders/syslinux_common/splash.svg"
+ARCHIVE_CONF="${ROOT_DIR}/config/includes.chroot/etc/blankon/archive.conf"
 
 echo "Switching development configuration to production..."
 echo
 
-# Replace arsip-dev with arsip in regular files.
-find "$ROOT_DIR" \
-    -type f \
-    -not -path "$ROOT_DIR/.git/*" \
-    -not -path "$SCRIPT_PATH" \
-    -exec grep -Il 'arsip-dev' {} + |
-while IFS= read -r file; do
-    echo "Updating: ${file}"
-    sed -i 's/arsip-dev/arsip/g' "$file"
-done
+if [ ! -w "$ARCHIVE_CONF" ]; then
+    echo "Error: ${ARCHIVE_CONF} is missing or not writable."
+    exit 1
+fi
 
-# Remove "DEVELOPMENT BUILD" from the production splash screen.
-if grep -q 'DEVELOPMENT BUILD' "$SPLASH"; then
-    echo "Updating: ${SPLASH}"
-    sed -i 's/DEVELOPMENT BUILD//g' "$SPLASH"
+# archive.conf is the single source of truth for the archive; build-iso
+# rewrites the LB_*MIRROR* entries in config/bootstrap from it on every run,
+# so only ARCHIVE_HOST needs switching here.
+if grep -q '^ARCHIVE_HOST="arsip-dev\.' "$ARCHIVE_CONF"; then
+    echo "Updating: ${ARCHIVE_CONF}"
+    sed -i 's/^ARCHIVE_HOST="arsip-dev\./ARCHIVE_HOST="arsip./' "$ARCHIVE_CONF"
 else
-    echo "No \"DEVELOPMENT BUILD\" string found in ${SPLASH}"
+    echo "No arsip-dev ARCHIVE_HOST found in ${ARCHIVE_CONF}"
 fi
 
 echo
 echo "Production switch complete."
 echo
 
-# Verify regular files only, excluding this script.
-remaining="$(
-    find "$ROOT_DIR" \
-        -type f \
-        -not -path "$ROOT_DIR/.git/*" \
-        -not -path "$SCRIPT_PATH" \
-        -exec grep -Il 'arsip-dev' {} + || true
-)"
-
-if [ -n "$remaining" ]; then
-    echo "WARNING: Some arsip-dev references still remain:"
-    echo "$remaining"
-else
-    echo "✓ No arsip-dev references remain."
+if grep -q '^ARCHIVE_HOST="arsip-dev\.' "$ARCHIVE_CONF"; then
+    echo "WARNING: ARCHIVE_HOST still points at arsip-dev."
+    exit 1
 fi
 
-if grep -q 'DEVELOPMENT BUILD' "$SPLASH"; then
-    echo "WARNING: \"DEVELOPMENT BUILD\" still exists in splash.svg."
-else
-    echo "✓ \"DEVELOPMENT BUILD\" removed from splash.svg."
-fi
+grep '^ARCHIVE_HOST=' "$ARCHIVE_CONF"
+echo "✓ ARCHIVE_HOST points at the production archive."
