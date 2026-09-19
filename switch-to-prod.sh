@@ -32,11 +32,12 @@ echo
 echo "Production switch complete."
 echo
 
-# Verify regular files only.
+# Verify regular files only, excluding this script.
 remaining="$(
     find "$ROOT_DIR" \
         -type f \
         -not -path "$ROOT_DIR/.git/*" \
+        -not -path "$SCRIPT_PATH" \
         -exec grep -Il 'arsip-dev' {} + || true
 )"
 
