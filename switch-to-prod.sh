@@ -3,16 +3,19 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+SCRIPT_PATH="${ROOT_DIR}/$(basename "${BASH_SOURCE[0]}")"
 SPLASH="${ROOT_DIR}/config/bootloaders/syslinux_common/splash.svg"
 
 echo "Switching development configuration to production..."
 echo
 
-cd "$ROOT_DIR"
-
-# Replace arsip-dev with arsip in tracked files.
-git grep -l 'arsip-dev' -- ':!'"$SCRIPT_NAME" | while IFS= read -r file; do
+# Replace arsip-dev with arsip in regular files.
+find "$ROOT_DIR" \
+    -type f \
+    -not -path "$ROOT_DIR/.git/*" \
+    -not -path "$SCRIPT_PATH" \
+    -exec grep -Il 'arsip-dev' {} + |
+while IFS= read -r file; do
     echo "Updating: ${file}"
     sed -i 's/arsip-dev/arsip/g' "$file"
 done
@@ -29,10 +32,17 @@ echo
 echo "Production switch complete."
 echo
 
-# Verify tracked files only.
-if git grep -n 'arsip-dev' -- ':!'"$SCRIPT_NAME"; then
-    echo
-    echo "WARNING: Some arsip-dev references still remain."
+# Verify regular files only.
+remaining="$(
+    find "$ROOT_DIR" \
+        -type f \
+        -not -path "$ROOT_DIR/.git/*" \
+        -exec grep -Il 'arsip-dev' {} + || true
+)"
+
+if [ -n "$remaining" ]; then
+    echo "WARNING: Some arsip-dev references still remain:"
+    echo "$remaining"
 else
     echo "✓ No arsip-dev references remain."
 fi
