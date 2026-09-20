@@ -60,9 +60,13 @@ sudo lb --version
   ```
 ## Build
 
-- `sudo lb clean --purge`
-- `sudo lb config`
-- `sudo lb build`
+Build through the wrapper. It merges `config/common/` with the directory named
+by `variant` (for example, `config/gnome/`) into `.build/config/` before calling
+live-build.
+
+```
+./build-iso
+```
 
 There is `build.sh` script that could be used to export the result to BlankOn's jahitan-harian directory.
 
