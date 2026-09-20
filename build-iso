@@ -65,6 +65,30 @@ apply_archive_config() {
   echo "Pointed $applied mirror entries in $conf at $ARCHIVE_URI"
 }
 
+prepare_build_tree() {
+  local source_dir="$1"
+  local variant
+
+  variant=$(<"$source_dir/variant")
+  if [[ ! "$variant" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+    echo "Error: Invalid variant: $variant"
+    return 1
+  fi
+  if [[ ! -d "$source_dir/config/common" ]] || [[ ! -d "$source_dir/config/$variant" ]]; then
+    echo "Error: Missing config/common or config/$variant"
+    return 1
+  fi
+
+  sudo rm -rf .build
+  mkdir -p .build/config
+  cp -a "$source_dir/config/common/." .build/config/
+  cp -a "$source_dir/config/$variant/." .build/config/
+  cp -a "$source_dir/auto" .build/auto
+  cp "$source_dir/variant" .build/variant
+  VARIANT="$variant"
+  IMAGE_NAME="blankon-live-image-$VARIANT-$ARCH"
+}
+
 if [[ -f "$BUILD_LOCKFILE" ]]; then
     OLD_PID=$(cat "$BUILD_LOCKFILE")
     if ps -p "$OLD_PID" > /dev/null 2>&1; then
@@ -114,6 +138,12 @@ REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|'
 
 # Optional
 ARCH=amd64
+VARIANT=$(<variant)
+if [[ ! "$VARIANT" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+  echo "Error: Invalid variant: $VARIANT"
+  exit 1
+fi
+IMAGE_NAME="blankon-live-image-$VARIANT-$ARCH"
 
 START=$(date +%s)
 
@@ -124,10 +154,12 @@ sudo rm -rf ./chroot ./local ./cache ./tmp || true
 ## Skip further steps if this is a build in local computer
 if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
 then
+  prepare_build_tree "."
+  cd .build || exit 1
   sudo lb clean
   sudo lb config --architectures $ARCH
   apply_archive_config
-  sudo time lb build --debug | sudo tee -a blankon-live-image-$ARCH.build.log
+  sudo time lb build --debug | sudo tee -a "$IMAGE_NAME.build.log"
   exit $?
 fi
 
@@ -166,27 +198,27 @@ COMMIT=$(git -C "./tmp/$TODAY-$TODAY_COUNT" rev-parse --short HEAD)
 CLEAN_REPO_URL=$(echo "$REPO" | sed 's/\.git$//')
 COMMIT_URL="$CLEAN_REPO_URL/commit/$COMMIT"
 mkdir -p "./tmp/$TODAY-$TODAY_COUNT"
-sudo rm -rf config
-sudo cp -vR "./tmp/$TODAY-$TODAY_COUNT/config" config
+prepare_build_tree "./tmp/$TODAY-$TODAY_COUNT"
+cd .build || exit 1
 sudo sed -i 's/BUILD_NUMBER/'"$TODAY-$TODAY_COUNT"'/g' config/bootloaders/syslinux_common/splash.svg
 
 ## Build
 sudo lb clean --purge
 sudo lb config --architectures $ARCH
 apply_archive_config
-sudo rm -rf blankon-live-image-$ARCH.build.log
-sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
+sudo rm -f "$IMAGE_NAME.build.log"
+sudo lb build 2>&1 | tee "$IMAGE_NAME.build.log"
 
-if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
+if tail -n 10 "$IMAGE_NAME.build.log" | grep -q "P: Build completed successfully"; then
   RESULT="telah terbit ✅"
   ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
-  cp -v blankon-live-image-$ARCH.contents "$TARGET_DIR/blankon-live-image-$ARCH.contents"
-  cp -v blankon-live-image-$ARCH.files "$TARGET_DIR/blankon-live-image-$ARCH.files"
-  cp -v blankon-live-image-$ARCH.packages "$TARGET_DIR/blankon-live-image-$ARCH.packages"
-  cp -v blankon-live-image-$ARCH.hybrid.iso "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso"
-  zsyncmake -u "${BUILD_PUBLISH_URL}/current/blankon-live-image-amd64.hybrid.iso" -o "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync" "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso"
-  sha256sum "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso" | sed 's#  .*/#  #' > "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum"
+  cp -v "$IMAGE_NAME.contents" "$TARGET_DIR/$IMAGE_NAME.contents"
+  cp -v "$IMAGE_NAME.files" "$TARGET_DIR/$IMAGE_NAME.files"
+  cp -v "$IMAGE_NAME.packages" "$TARGET_DIR/$IMAGE_NAME.packages"
+  cp -v "$IMAGE_NAME.hybrid.iso" "$TARGET_DIR/$IMAGE_NAME.hybrid.iso"
+  zsyncmake -u "${BUILD_PUBLISH_URL}/current/$IMAGE_NAME.hybrid.iso" -o "$TARGET_DIR/$IMAGE_NAME.hybrid.iso.zsync" "$TARGET_DIR/$IMAGE_NAME.hybrid.iso"
+  sha256sum "$TARGET_DIR/$IMAGE_NAME.hybrid.iso" | sed 's#  .*/#  #' > "$TARGET_DIR/$IMAGE_NAME.hybrid.iso.sha256sum"
   sudo rm -rf "$BUILD_JAHITAN_PATH/current"
   #ln -s $TARGET_DIR $BUILD_JAHITAN_PATH/current
   sudo cp -vR "$TARGET_DIR" "$BUILD_JAHITAN_PATH/current"
@@ -197,9 +229,9 @@ END=$(date +%s)
 DURATION=$((END - START))
 TOTAL_DURATION="Done in $(date -d@$DURATION -u +%H:%M:%S)."
 echo "$TOTAL_DURATION"
-echo "$TOTAL_DURATION" >> blankon-live-image-$ARCH.build.log
-tail -n 100 blankon-live-image-$ARCH.build.log > "$TARGET_DIR/blankon-live-image-$ARCH.tail100.build.log.txt"
-cp -v blankon-live-image-$ARCH.build.log "$TARGET_DIR/blankon-live-image-$ARCH.build.log.txt"
+echo "$TOTAL_DURATION" >> "$IMAGE_NAME.build.log"
+tail -n 100 "$IMAGE_NAME.build.log" > "$TARGET_DIR/$IMAGE_NAME.tail100.build.log.txt"
+cp -v "$IMAGE_NAME.build.log" "$TARGET_DIR/$IMAGE_NAME.build.log.txt"
 
 ## Clean up the mounted entities
 sudo umount "$(mount | grep live-build | cut -d ' ' -f 3)" || true

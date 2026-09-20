@@ -3,8 +3,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ARCHIVE_CONF="${ROOT_DIR}/config/includes.chroot/etc/blankon/archive.conf"
-SPLASH_SVG="${ROOT_DIR}/config/bootloaders/syslinux_common/splash.svg"
+ARCHIVE_CONF="${ROOT_DIR}/config/common/includes.chroot/etc/blankon/archive.conf"
+SPLASH_SVG="${ROOT_DIR}/config/common/bootloaders/syslinux_common/splash.svg"
 
 echo "Switching development configuration to production..."
 echo
