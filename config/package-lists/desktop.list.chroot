@@ -13,7 +13,7 @@ fonts-noto-core
 locales
 task-indonesian-desktop
 libreoffice
-libreoffice-gtk4
+libreoffice-gtk3
 gnome-initial-setup
 virtualbox-guest-x11
 audacious
