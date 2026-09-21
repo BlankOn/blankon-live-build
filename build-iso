@@ -131,9 +131,34 @@ ACTION="Log build dapat disimak"
 FAILURE_REASON=""
 
 ## Args
-REPO=$1
-BRANCH=$2
-COMMIT=$3
+usage() {
+  echo "Usage: $0 --local <absolute-source-dir>"
+  echo "       $0 --remote <repo> <branch> [commit]"
+}
+
+MODE=$1
+LOCAL_SOURCE=""
+REPO=""
+BRANCH=""
+COMMIT=""
+case "$MODE" in
+  --local)
+    [[ $# -eq 2 ]] || { usage; exit 2; }
+    [[ "$2" == /* ]] || { echo "Error: Local source path must be absolute: $2"; exit 2; }
+    [[ -d "$2" ]] || { echo "Error: Local source directory not found: $2"; exit 2; }
+    LOCAL_SOURCE=$2
+    ;;
+  --remote)
+    [[ $# -ge 3 && $# -le 4 ]] || { usage; exit 2; }
+    REPO=$2
+    BRANCH=$3
+    COMMIT=${4:-}
+    ;;
+  *)
+    usage
+    exit 2
+    ;;
+esac
 REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|')
 
 # Optional
@@ -145,10 +170,10 @@ sudo umount "$(mount | grep live-build | cut -d ' ' -f 3)" || true
 
 sudo rm -rf ./chroot ./local ./cache ./tmp || true
 
-## Skip further steps if this is a build in local computer
-if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
+## Build directly from this local checkout.
+if [[ "$MODE" == "--local" ]]
 then
-  prepare_build_tree "."
+  prepare_build_tree "$LOCAL_SOURCE"
   cd .build || exit 1
   sudo lb clean
   sudo lb config --architectures $ARCH

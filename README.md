@@ -65,7 +65,13 @@ by `variant` (for example, `config/gnome/`) into `.build/config/` before calling
 live-build.
 
 ```
-./build-iso
+./build-iso --local /absolute/path/to/blankon-live-build
+```
+
+The Docker worker can build a committed branch instead:
+
+```
+./build-iso --remote <repo> <branch> [commit]
 ```
 
 There is `build.sh` script that could be used to export the result to BlankOn's jahitan-harian directory.
