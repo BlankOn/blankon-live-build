@@ -138,12 +138,6 @@ REPO_NAME=$(echo "$REPO" | sed -E 's|.*github.com[:/]([^/]+/[^/.]+)(\.git)?|\1|'
 
 # Optional
 ARCH=amd64
-VARIANT=$(<variant)
-if [[ ! "$VARIANT" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
-  echo "Error: Invalid variant: $VARIANT"
-  exit 1
-fi
-IMAGE_NAME="blankon-live-image-$VARIANT-$ARCH"
 
 START=$(date +%s)
 
