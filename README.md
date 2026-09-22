@@ -2,7 +2,7 @@
 
 This repository contains the BlankOn live-build configuration. ISO build
 orchestration lives in the separate
-[blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
+[blankon-image-builder](https://github.com/BlankOn/blankon-image-builder)
 repository.
 
 The Debian Live project produces the framework used to build live systems based on Debian and the official Debian Live images themselves.
@@ -58,22 +58,22 @@ sudo lb --version
 ## Build
 
 Build through the standalone
-[blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
+[blankon-image-builder](https://github.com/BlankOn/blankon-image-builder)
 repository. See its README for builder setup and configuration. Keep both
 repositories as siblings beneath `BUILD_LOCAL`:
 
 ```
 $BUILD_LOCAL/
 ├── blankon-live-build/
-└── blankon-live-builder/
+└── blankon-image-builder/
 ```
 
-From `blankon-live-builder`, a local build merges `config/common/` with the
+From `blankon-image-builder`, a local build merges `config/common/` with the
 directory named by `variant` (for example, `config/gnome/`) into `.build/config/`
 before calling live-build:
 
 ```
-cd "$BUILD_LOCAL/blankon-live-builder"
+cd "$BUILD_LOCAL/blankon-image-builder"
 ./build-iso --local blankon-live-build
 # An absolute path is also supported:
 ./build-iso --local "$BUILD_LOCAL/blankon-live-build"
