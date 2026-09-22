@@ -19,7 +19,6 @@ config/hooks/normal/0170-remove-python-py.hook.chroot
 config/hooks/normal/0420-update-glx-alternative.hook.chroot
 config/hooks/normal/0440-update-nvidia-alternative.hook.chroot
 config/package-lists/live.list.chroot
-local.build.sh
 *.build.log
 *.tail100.build.log.txt
 *.sha256sum

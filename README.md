@@ -79,7 +79,7 @@ cd "$BUILD_LOCAL/blankon-live-builder"
 ./build-iso --local "$BUILD_LOCAL/blankon-live-build"
 ```
 
-The Docker worker can build a committed branch instead:
+The builder can build a committed branch instead:
 
 ```
 ./build-iso --remote <repo> <branch> [commit]
