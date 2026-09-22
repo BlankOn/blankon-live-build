@@ -60,18 +60,20 @@ sudo lb --version
   ```
 ## Build
 
-Build through the wrapper. It merges `config/common/` with the directory named
-by `variant` (for example, `config/gnome/`) into `.build/config/` before calling
-live-build.
+Build through the standalone
+[blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
+wrapper. From the Kang Jahit workdir, it merges `config/common/` with the
+directory named by `variant` (for example, `config/gnome/`) into `.build/config/`
+before calling live-build.
 
 ```
-./build-iso --local /absolute/path/to/blankon-live-build
+/builder/build-iso --local /source
 ```
 
 The Docker worker can build a committed branch instead:
 
 ```
-./build-iso --remote <repo> <branch> [commit]
+/builder/build-iso --remote <repo> <branch> [commit]
 ```
 
 There is `build.sh` script that could be used to export the result to BlankOn's jahitan-harian directory.
