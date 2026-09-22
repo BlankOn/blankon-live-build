@@ -1,6 +1,9 @@
 # BlankOn live-build
 
-This is repository for BlankOn live-build configuration. Before migrated to live-build, Blankon used to build the ISOs using custom-made script called [pabrik-cc](https://github.com/BlankOn/pabrik-cc) based on old debootstrap.
+This repository contains the BlankOn live-build configuration. ISO build
+orchestration lives in the separate
+[blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
+repository.
 
 The Debian Live project produces the framework used to build live systems based on Debian and the official Debian Live images themselves.
 
@@ -11,15 +14,9 @@ References:
 
 ## Prerequisites and preparation
 
-Need live-build version **20230502** or commit sha on `dd916ac5be9428ff79a28fb6343f5d244acca438`
-
 ### Install tools:
 ```
-sudo apt install debootstrap make git apt-utils
-git clone https://salsa.debian.org/live-team/live-build.git debian-live-build
-cd debian-live-build
-git checkout 7360d50fa6b
-sudo make install
+sudo apt install debootstrap live-build make git apt-utils
 sudo lb --version
 ```
 
@@ -62,7 +59,20 @@ sudo lb --version
 
 Build through the standalone
 [blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
-wrapper. From the Kang Jahit workdir, it merges `config/common/` with the
+wrapper. The builder repository owns `build-iso` and its `.env` file. The
+live-build checkout is mounted at `/source`; the builder checkout is mounted at
+`/builder`.
+
+Prepare the builder configuration:
+
+```
+git clone https://github.com/BlankOn/blankon-live-builder.git
+cd blankon-live-builder
+cp .env.example .env
+# Edit .env with the build and publishing settings.
+```
+
+From the Kang Jahit workdir, a local build merges `config/common/` with the
 directory named by `variant` (for example, `config/gnome/`) into `.build/config/`
 before calling live-build.
 
@@ -74,13 +84,6 @@ The Docker worker can build a committed branch instead:
 
 ```
 /builder/build-iso --remote <repo> <branch> [commit]
-```
-
-There is `build.sh` script that could be used to export the result to BlankOn's jahitan-harian directory.
-
-Simple way
-```
-bash build.sh
 ```
 
 ## TODO
