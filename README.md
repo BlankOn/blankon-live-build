@@ -59,32 +59,34 @@ sudo lb --version
 
 Build through the standalone
 [blankon-live-builder](https://github.com/BlankOn/blankon-live-builder)
-wrapper. The builder repository owns `build-iso` and its `.env` file. The
-live-build checkout is mounted at `/source`; the builder checkout is mounted at
-`/builder`.
-
-Prepare the builder configuration:
+repository. See its README for builder setup and configuration. Keep both
+repositories as siblings beneath `BUILD_LOCAL`:
 
 ```
-git clone https://github.com/BlankOn/blankon-live-builder.git
-cd blankon-live-builder
-cp .env.example .env
-# Edit .env with the build and publishing settings.
+$BUILD_LOCAL/
+├── blankon-live-build/
+└── blankon-live-builder/
 ```
 
-From the Kang Jahit workdir, a local build merges `config/common/` with the
+From `blankon-live-builder`, a local build merges `config/common/` with the
 directory named by `variant` (for example, `config/gnome/`) into `.build/config/`
-before calling live-build.
+before calling live-build:
 
 ```
-/builder/build-iso --local /source
+cd "$BUILD_LOCAL/blankon-live-builder"
+./build-iso --local blankon-live-build
+# An absolute path is also supported:
+./build-iso --local "$BUILD_LOCAL/blankon-live-build"
 ```
 
 The Docker worker can build a committed branch instead:
 
 ```
-/builder/build-iso --remote <repo> <branch> [commit]
+./build-iso --remote <repo> <branch> [commit]
 ```
+
+When Compose is used, host directories are mounted at the same absolute paths
+inside the containers.
 
 ## TODO
 
