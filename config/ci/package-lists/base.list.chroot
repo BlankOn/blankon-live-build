@@ -2,5 +2,4 @@ blankon-keyring
 live-boot
 live-config
 live-config-systemd
-sudo
-ca-certificates
+systemd-sysv

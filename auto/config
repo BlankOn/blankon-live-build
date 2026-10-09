@@ -36,14 +36,15 @@ lb config noauto \
   --cache-indices false \
   --cache-packages true \
   --cache-stages bootstrap \
-  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg" \
+  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg --variant=minbase" \
   --debootstrap-script sid \
   --mode blankon \
   --system live \
+  --initsystem systemd \
   --image-name "blankon-live-image-$VARIANT" \
   --binary-image iso-hybrid \
   --binary-filesystem fat32 \
-  --bootappend-live "boot=live components username=blankon hostname=blankon" \
+  --bootappend-live "boot=live components username=blankon hostname=blankon console=tty0 console=ttyS0,115200n8 blankon.ci=1" \
   --bootloaders "syslinux grub-efi" \
   --checksums sha256 \
   --compression gzip \

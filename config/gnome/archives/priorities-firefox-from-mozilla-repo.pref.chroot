@@ -1,4 +1,0 @@
-# Priorities from mozilla repo
-Package: *
-Pin: origin packages.mozilla.org
-Pin-Priority: 1000

@@ -1,0 +1,9 @@
+[Unit]
+ConditionKernelCommandLine=blankon.ci=1
+After=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+StandardOutput=tty
+TTYPath=/dev/ttyS0
+ExecStart=/bin/sh -c "test -d /run/live/medium && test -s /run/live/medium/live/filesystem.squashfs && test -d /run/live/rootfs && test -r /etc/blankon/archive.conf && echo BLANKON_LIVE_BOOT_OK"
