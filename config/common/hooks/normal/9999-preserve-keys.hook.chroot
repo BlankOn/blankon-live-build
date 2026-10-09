@@ -1,3 +1,0 @@
-#!/bin/sh
-# Keep the keyring installed until the very end
-exit 0
