@@ -26,3 +26,6 @@ wget-log*
 .env
 .DS_Store
 *~
+AGENTS.md
+CLAUDE.md
+*_MAP.md

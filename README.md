@@ -13,6 +13,6 @@ See the builder README for setup and prerequisites. From the builder repository:
 ./build-iso --remote https://github.com/BlankOn/blankon-live-build.git sinambung-dummy [commit]
 ```
 
-The `variant` file selects `ci`. Its serial-console boot marker is a userspace
-smoke signal, not proof of desktop readiness. Publish this branch before remote
-or CI use.
+The `variant` file selects `ci`, a minimal build-only smoke profile. CI checks
+local/remote builds and package-cache cleanup. Publish this branch before remote
+builds or CI use.

@@ -44,7 +44,7 @@ lb config noauto \
   --image-name "blankon-live-image-$VARIANT" \
   --binary-image iso-hybrid \
   --binary-filesystem fat32 \
-  --bootappend-live "boot=live components username=blankon hostname=blankon console=tty0 console=ttyS0,115200n8 blankon.ci=1" \
+  --bootappend-live "boot=live components username=blankon hostname=blankon" \
   --bootloaders "syslinux grub-efi" \
   --checksums sha256 \
   --compression gzip \
