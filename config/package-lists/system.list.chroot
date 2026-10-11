@@ -1,5 +1,6 @@
 blankon-keyring
 cryptsetup
+cryptsetup-initramfs
 keyboard-configuration
 live-boot
 live-config
