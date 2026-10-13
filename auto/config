@@ -47,7 +47,6 @@ lb config noauto \
   --bootappend-live "boot=live components username=blankon hostname=blankon" \
   --bootloaders "syslinux grub-efi" \
   --checksums sha256 \
-  --compression gzip \
   --debian-installer none \
   --firmware-binary false \
   --firmware-chroot false \
