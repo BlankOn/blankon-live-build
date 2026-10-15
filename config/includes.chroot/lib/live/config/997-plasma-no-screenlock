@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# live-config(7) component: keep Plasma from locking the live session.
+#
+# calamares-settings-blankon turns the lock screen off for the live session
+# through a GSettings override, which only GNOME reads. On Plasma the screen
+# would lock after the idle timeout, possibly in the middle of an install.
+# Plasma reads this from kscreenlockerrc.
+#
+# It only ever runs in a live session and writes to the live user's home on
+# the overlay, so an installed system keeps Plasma's defaults.
+
+set -eu
+
+. /usr/lib/live/init-config.sh
+
+for _PARAMETER in $(cat /proc/cmdline)
+do
+	case "${_PARAMETER}" in
+		live-config.username=*|username=*)
+			LIVE_USERNAME="${_PARAMETER#*username=}"
+			;;
+	esac
+done
+
+[ -n "${LIVE_USERNAME:-}" ] || exit 0
+
+_HOME="$(getent passwd "${LIVE_USERNAME}" | cut -d: -f6)"
+[ -n "${_HOME}" ] && [ -d "${_HOME}" ] || exit 0
+
+mkdir -p "${_HOME}/.config"
+
+cat > "${_HOME}/.config/kscreenlockerrc" << EOF2
+[Daemon]
+Autolock=false
+LockOnResume=false
+EOF2
+
+chown -R "${LIVE_USERNAME}:" "${_HOME}/.config"

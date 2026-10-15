@@ -8,4 +8,4 @@ git
 netcat-openbsd
 openssh-client
 flatpak
-gnome-software-plugin-flatpak
+plasma-discover-backend-flatpak

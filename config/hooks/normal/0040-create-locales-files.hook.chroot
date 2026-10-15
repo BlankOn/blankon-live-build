@@ -23,6 +23,6 @@ mkdir -p /var/lib/AccountsService/users
 cat > /var/lib/AccountsService/users/blankon << 'EOF'
 [User]
 Language=id_ID.UTF-8
-XSession=gnome
+XSession=plasma
 SystemAccount=false
 EOF

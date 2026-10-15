@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -e
+
+# Use the KF6 VCL plugin for LibreOffice so it picks up Plasma's Breeze
+# style and the KDE file dialogs.
+echo "SAL_USE_VCLPLUGIN=kf6" >> /etc/environment

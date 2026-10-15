@@ -16,4 +16,4 @@
 # on purpose -- earlyoom matches against /proc/PID/comm, which the kernel
 # caps at 15 characters, so Firefox's "Isolated Web Content" appears there
 # as "Isolated Web Co".
-EARLYOOM_ARGS="-r 3600 --avoid '^(systemd|gnome-shell|gdm3|Xorg|Xwayland|dbus-daemon|NetworkManager|calamares|sshd)$' --prefer '^(Web Content|Isolated Web Co|Isolated Servic|firefox|chrome|chromium|thunderbird)$'"
+EARLYOOM_ARGS="-r 3600 --avoid '^(systemd|plasmashell|kwin_wayland|sddm|Xorg|Xwayland|dbus-daemon|NetworkManager|calamares|sshd)$' --prefer '^(Web Content|Isolated Web Co|Isolated Servic|firefox|chrome|chromium|thunderbird)$'"

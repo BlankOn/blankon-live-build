@@ -4,7 +4,7 @@ set -e
 
 # Refresh AppStream metadata cache.
 #
-# This pre-populates the AppStream cache so that GNOME Software
+# This pre-populates the AppStream cache so that Plasma Discover
 # loads faster in the live session.
 
 if command -v appstreamcli >/dev/null
