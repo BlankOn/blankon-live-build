@@ -178,19 +178,28 @@ sudo rm -rf blankon-live-image-$ARCH.build.log
 sudo lb build 2>&1 | tee blankon-live-image-$ARCH.build.log
 
 if tail -n 10 blankon-live-image-$ARCH.build.log | grep -q "P: Build completed successfully"; then
-  RESULT="telah terbit ✅"
-  ACTION="Berkas citra dapat diunduh"
   ## Export to jahitan
   cp -v blankon-live-image-$ARCH.contents "$TARGET_DIR/blankon-live-image-$ARCH.contents"
   cp -v blankon-live-image-$ARCH.files "$TARGET_DIR/blankon-live-image-$ARCH.files"
   cp -v blankon-live-image-$ARCH.packages "$TARGET_DIR/blankon-live-image-$ARCH.packages"
   cp -v blankon-live-image-$ARCH.hybrid.iso "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso"
-  zsyncmake -u "${BUILD_PUBLISH_URL}/current/blankon-live-image-amd64.hybrid.iso" -o "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync" "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso"
-  sha256sum "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso" | sed 's#  .*/#  #' > "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum"
-  sudo rm -rf "$BUILD_JAHITAN_PATH/current"
-  #ln -s $TARGET_DIR $BUILD_JAHITAN_PATH/current
-  sudo cp -vR "$TARGET_DIR" "$BUILD_JAHITAN_PATH/current"
-  echo "$TODAY-$TODAY_COUNT" > "$BUILD_JAHITAN_PATH/current/current.txt"
+  ZSYNC_FILE="$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.zsync"
+  zsyncmake -u "${BUILD_PUBLISH_URL}/current/blankon-live-image-amd64.hybrid.iso" -o "$ZSYNC_FILE" "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso"
+
+  # A truncated ISO has been seen with the success message in the log but no
+  # zsync file, so both must be present before the image is published.
+  if [[ -s "$ZSYNC_FILE" ]]; then
+    RESULT="telah terbit ✅"
+    ACTION="Berkas citra dapat diunduh"
+    sha256sum "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso" | sed 's#  .*/#  #' > "$TARGET_DIR/blankon-live-image-$ARCH.hybrid.iso.sha256sum"
+    sudo rm -rf "$BUILD_JAHITAN_PATH/current"
+    #ln -s $TARGET_DIR $BUILD_JAHITAN_PATH/current
+    sudo cp -vR "$TARGET_DIR" "$BUILD_JAHITAN_PATH/current"
+    echo "$TODAY-$TODAY_COUNT" > "$BUILD_JAHITAN_PATH/current/current.txt"
+  else
+    FAILURE_REASON="Error: Build log reports success but the zsync file was not produced, the ISO is probably corrupt."
+    echo "$FAILURE_REASON"
+  fi
 fi
 
 END=$(date +%s)
