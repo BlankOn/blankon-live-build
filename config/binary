@@ -104,4 +104,6 @@ LB_SWAP_FILE_PATH=""
 LB_SWAP_FILE_SIZE="512"
 
 # Enable/disable UEFI secure boot support
-LB_UEFI_SECURE_BOOT="disable"
+# "enable" makes the build fail if the signed shim/GRUB packages are missing,
+# instead of silently falling back to an unsigned bootloader.
+LB_UEFI_SECURE_BOOT="enable"
