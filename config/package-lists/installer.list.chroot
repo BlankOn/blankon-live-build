@@ -1,3 +1,8 @@
 calamares
 calamares-settings-blankon
 gparted
+efibootmgr
+grub-efi-amd64-bin
+grub-efi-amd64-signed
+mokutil
+shim-signed
