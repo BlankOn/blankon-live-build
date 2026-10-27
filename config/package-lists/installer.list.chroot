@@ -1,6 +1,9 @@
 calamares
 calamares-settings-blankon
 gparted
+# Secure Boot chain (Microsoft-signed shim + Debian-signed GRUB) and the
+# tools the installer needs to enroll/verify it. Keeping them in the live
+# rootfs also lets Calamares install a UEFI system without network access.
 efibootmgr
 grub-efi-amd64-bin
 grub-efi-amd64-signed
