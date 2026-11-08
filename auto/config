@@ -37,7 +37,7 @@ lb config noauto \
   --cache-indices false \
   --cache-packages true \
   --cache-stages bootstrap \
-  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg" \
+  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg --include=ca-certificates" \
   --debootstrap-script sid \
   --mode blankon \
   --system live \
