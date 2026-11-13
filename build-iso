@@ -65,6 +65,27 @@ apply_archive_config() {
   echo "Pointed $applied mirror entries in $conf at $ARCHIVE_URI"
 }
 
+# A build that runs out of disk can still report success while leaving a
+# truncated ISO behind, so refuse to start without enough room.
+MIN_FREE_GB=5
+
+require_free_space() {
+  local free_kb
+  free_kb=$(df -Pk . | awk 'NR==2 {print $4}')
+
+  if [[ ! "$free_kb" =~ ^[0-9]+$ ]]; then
+    FAILURE_REASON="Error: Cannot determine free disk space in $PWD"
+    echo "$FAILURE_REASON"
+    exit 1
+  fi
+
+  if (( free_kb < MIN_FREE_GB * 1024 * 1024 )); then
+    FAILURE_REASON="Error: Only $((free_kb / 1024))MB free in $PWD, at least ${MIN_FREE_GB}GB is required"
+    echo "$FAILURE_REASON"
+    exit 1
+  fi
+}
+
 if [[ -f "$BUILD_LOCKFILE" ]]; then
     OLD_PID=$(cat "$BUILD_LOCKFILE")
     if ps -p "$OLD_PID" > /dev/null 2>&1; then
@@ -124,6 +145,7 @@ sudo rm -rf ./chroot ./local ./cache ./tmp || true
 ## Skip further steps if this is a build in local computer
 if [[ -z "$REPO" ]] || [[ -z "$BRANCH" ]]
 then
+  require_free_space
   sudo lb clean
   sudo lb config --architectures $ARCH
   apply_archive_config
@@ -140,6 +162,8 @@ TODAY_COUNT=$(ls $BUILD_JAHITAN_PATH | grep "$TODAY" | wc -l)
 TODAY_COUNT=$(("$TODAY_COUNT" + 1))
 
 TARGET_DIR=$BUILD_JAHITAN_PATH/$TODAY-$TODAY_COUNT
+
+require_free_space
 
 mkdir -p "$TARGET_DIR"
 sudo mkdir -p tmp || true
