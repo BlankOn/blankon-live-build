@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>BlankOn battery charging</title>
+  <rect x="5" y="16" width="49" height="32" rx="7"
+        fill="#0f172a" fill-opacity="0.08"
+        stroke="#263746" stroke-width="3.5"/>
+  <rect x="55" y="25" width="5" height="14" rx="2.2" fill="#263746"/>
+  <rect x="9" y="21" width="4.20" height="22" rx="4" fill="#ef4444"/>
+  
+  <path d="M36 15 L26 33 H33 L29 49 L42 29 H35 Z"
+        fill="#ffffff" stroke="#ffffff" stroke-linejoin="round" stroke-width="1.2"/>
+  
+</svg>

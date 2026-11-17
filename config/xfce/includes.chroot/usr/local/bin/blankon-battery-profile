@@ -1,0 +1,66 @@
+#!/bin/bash
+
+CONFIG_DIR="$HOME/.config/xfce4/panel"
+HAS_BATTERY=false
+
+# Detect physical battery
+for device in /sys/class/power_supply/*; do
+    [ -r "$device/type" ] || continue
+
+    TYPE=$(cat "$device/type")
+
+    if [ "$TYPE" = "Battery" ]; then
+        if [ -r "$device/present" ]; then
+            [ "$(cat "$device/present")" = "1" ] || continue
+        fi
+
+        HAS_BATTERY=true
+        break
+    fi
+done
+
+# Wait until Battery Monitor configuration exists
+for i in $(seq 1 30); do
+    compgen -G "$CONFIG_DIR/battery-*.rc" >/dev/null && break
+    sleep 1
+done
+
+# Stop panel before changing plugin configuration
+xfce4-panel --quit 2>/dev/null || true
+sleep 2
+
+# Apply hardware-specific settings
+python3 - "$CONFIG_DIR" "$HAS_BATTERY" <<'PY'
+import sys
+from pathlib import Path
+
+directory = Path(sys.argv[1])
+has_battery = sys.argv[2] == "true"
+
+settings = {
+    "display_icon": has_battery,
+    "display_percentage": has_battery,
+}
+
+for config in directory.glob("battery-*.rc"):
+    lines = config.read_text().splitlines()
+
+    for key, value in settings.items():
+        replacement = f"{key}={'true' if value else 'false'}"
+
+        for index, line in enumerate(lines):
+            if line.startswith(key + "="):
+                lines[index] = replacement
+                break
+        else:
+            lines.append(replacement)
+
+    config.write_text("\n".join(lines) + "\n")
+
+print("Battery detected:", has_battery)
+print("Icon:", settings["display_icon"])
+print("Percentage:", settings["display_percentage"])
+PY
+
+# Start XFCE panel again
+xfce4-panel >/dev/null 2>&1 &

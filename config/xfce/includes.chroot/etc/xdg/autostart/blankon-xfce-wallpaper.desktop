@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=BlankOn XFCE Wallpaper
+Comment=Apply the default BlankOn XFCE wallpaper
+Exec=/usr/local/bin/blankon-xfce-wallpaper
+Terminal=false
+OnlyShowIn=XFCE;
+NoDisplay=true

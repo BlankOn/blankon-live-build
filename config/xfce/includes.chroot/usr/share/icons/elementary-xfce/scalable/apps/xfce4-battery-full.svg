@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>BlankOn battery status</title>
+  <rect x="5" y="16" width="49" height="32" rx="7"
+        fill="#0f172a" fill-opacity="0.08"
+        stroke="#263746" stroke-width="3.5"/>
+  <rect x="55" y="25" width="5" height="14" rx="2.2" fill="#263746"/>
+  <rect x="9" y="21" width="40.32" height="22" rx="4" fill="#22c55e"/>
+  
+  
+</svg>

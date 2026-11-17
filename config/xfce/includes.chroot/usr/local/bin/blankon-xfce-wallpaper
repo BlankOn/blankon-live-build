@@ -1,0 +1,42 @@
+#!/bin/sh
+
+WALLPAPER="/usr/share/backgrounds/xfce/xfce-blue.jpg"
+
+[ -f "$WALLPAPER" ] || exit 0
+
+# Wait until XFCE desktop is running.
+for i in $(seq 1 30); do
+    pgrep -x xfdesktop >/dev/null && break
+    sleep 1
+done
+
+sleep 2
+
+# Detect connected monitors and configure their wallpaper.
+xrandr --query |
+awk '$2 == "connected" { print $1 }' |
+while read -r MONITOR; do
+    BASE="/backdrop/screen0/monitor${MONITOR}/workspace0"
+
+    xfconf-query -c xfce4-desktop \
+        -p "$BASE/image-path" --create \
+        -t string -s "$WALLPAPER"
+
+    xfconf-query -c xfce4-desktop \
+        -p "$BASE/last-image" --create \
+        -t string -s "$WALLPAPER"
+
+    xfconf-query -c xfce4-desktop \
+        -p "$BASE/last-single-image" --create \
+        -t string -s "$WALLPAPER"
+
+    xfconf-query -c xfce4-desktop \
+        -p "$BASE/image-show" --create \
+        -t bool -s true
+
+    xfconf-query -c xfce4-desktop \
+        -p "$BASE/image-style" --create \
+        -t int -s 5
+done
+
+xfdesktop --reload

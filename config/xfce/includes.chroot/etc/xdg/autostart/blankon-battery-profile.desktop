@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=BlankOn Battery Profile
+Comment=Automatically configure battery indicators
+Exec=/usr/local/bin/blankon-battery-profile
+Terminal=false
+OnlyShowIn=XFCE;
+StartupNotify=false

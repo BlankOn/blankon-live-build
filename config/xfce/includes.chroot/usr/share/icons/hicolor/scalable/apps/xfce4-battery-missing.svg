@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>BlankOn battery missing</title>
+  <rect x="5" y="16" width="49" height="32" rx="7"
+        fill="#0f172a" fill-opacity="0.08"
+        stroke="#263746" stroke-width="3.5"/>
+  <rect x="55" y="25" width="5" height="14" rx="2.2" fill="#263746"/>
+  
+  
+  
+  <path d="M20 25 L40 39 M40 25 L20 39"
+        stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
