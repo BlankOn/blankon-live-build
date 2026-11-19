@@ -1,42 +1,56 @@
 #!/bin/sh
 
 WALLPAPER="/usr/share/backgrounds/xfce/xfce-blue.jpg"
+CHANNEL="xfce4-desktop"
 
 [ -f "$WALLPAPER" ] || exit 0
 
 # Wait until XFCE desktop is running.
 for i in $(seq 1 30); do
-    pgrep -x xfdesktop >/dev/null && break
+    if pgrep -x xfdesktop >/dev/null; then
+        break
+    fi
     sleep 1
 done
 
+pgrep -x xfdesktop >/dev/null || exit 0
+
+# Allow XFCE configuration service to initialize.
 sleep 2
 
-# Detect connected monitors and configure their wallpaper.
-xrandr --query |
-awk '$2 == "connected" { print $1 }' |
-while read -r MONITOR; do
-    BASE="/backdrop/screen0/monitor${MONITOR}/workspace0"
+# Detect monitor identifiers from Xfconf, not xrandr output names.
+MONITORS=$(
+    xfconf-query -c "$CHANNEL" -l |
+    sed -nE 's#^(/backdrop/screen[0-9]+/monitor[0-9]+)(/.*)?$#\1#p' |
+    sort -u
+)
 
-    xfconf-query -c xfce4-desktop \
+# Fallback to monitor0 if no monitor property is found.
+[ -n "$MONITORS" ] || MONITORS="/backdrop/screen0/monitor0"
+
+for BASE in $MONITORS; do
+
+    xfconf-query -c "$CHANNEL" \
         -p "$BASE/image-path" --create \
         -t string -s "$WALLPAPER"
 
-    xfconf-query -c xfce4-desktop \
+    xfconf-query -c "$CHANNEL" \
         -p "$BASE/last-image" --create \
         -t string -s "$WALLPAPER"
 
-    xfconf-query -c xfce4-desktop \
+    xfconf-query -c "$CHANNEL" \
         -p "$BASE/last-single-image" --create \
         -t string -s "$WALLPAPER"
 
-    xfconf-query -c xfce4-desktop \
+    xfconf-query -c "$CHANNEL" \
         -p "$BASE/image-show" --create \
         -t bool -s true
 
-    xfconf-query -c xfce4-desktop \
+    xfconf-query -c "$CHANNEL" \
         -p "$BASE/image-style" --create \
         -t int -s 5
 done
 
 xfdesktop --reload
+
+exit 0
