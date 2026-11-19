@@ -10,7 +10,7 @@ LB_BINARY_FILESYSTEM="fat32"
 LB_APT_INDICES="true"
 
 # Set boot parameters
-LB_BOOTAPPEND_LIVE="boot=live components quiet splash username=blankon hostname=blankon user-fullname=BlankOn nottyautologin"
+LB_BOOTAPPEND_LIVE="boot=live components i915.enable_psr=0 i915.enable_fbc=0 username=blankon hostname=blankon user-fullname=BlankOn nottyautologin"
 
 # Set boot parameters
 LB_BOOTAPPEND_INSTALL=""
