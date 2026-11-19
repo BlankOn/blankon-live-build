@@ -1,0 +1,15 @@
+{
+    "KPlugin": {
+        "Name": "BlankOn Sinambung",
+        "Id": "org.blankon.desktop",
+        "Description": "BlankOn Sinambung Desktop Theme",
+        "Version": "26.0",
+        "License": "GPLv2+",
+        "Authors": [
+            {
+                "Name": "BlankOn Developers",
+                "Email": "blankon-dev@googlegroups.com"
+            }
+        ]
+    }
+}

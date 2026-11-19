@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+# Replace the default Kickoff menu icon with the BlankOn symbolic start icon
+KICKOFF_XML="/usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/config/main.xml"
+if [ -f "$KICKOFF_XML" ]; then
+    sed -i -E 's/<default>start-here-[a-zA-Z0-9-]+<\/default>/<default>start-here-blankon-symbolic<\/default>/' "$KICKOFF_XML"
+fi

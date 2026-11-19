@@ -32,7 +32,9 @@ mkdir -p "${_HOME}/.config"
 
 cat > "${_HOME}/.config/kscreenlockerrc" << EOF2
 [Daemon]
+Timeout=0
 Autolock=false
+RequirePassword=false
 LockOnResume=false
 EOF2
 

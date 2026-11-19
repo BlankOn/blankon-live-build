@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+
+# Divert the X11 session desktop file so that SDDM only exposes the
+# pure Wayland session (plasma.desktop). This keeps the session list clean
+# and forces Wayland-only across upgrades.
+if [ -f /usr/share/xsessions/plasmax11.desktop ]; then
+    dpkg-divert --local --rename --add /usr/share/xsessions/plasmax11.desktop
+fi

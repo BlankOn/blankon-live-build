@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# live-config(7) component: Optimizations for the Plasma Live session environment.
+#
+# Since this only runs inside the live session and writes to the live user's home
+# on the overlay, the installed system will retain all normal Plasma defaults.
+
+set -eu
+
+. /usr/lib/live/init-config.sh
+
+for _PARAMETER in $(cat /proc/cmdline)
+do
+	case "${_PARAMETER}" in
+		live-config.username=*|username=*)
+			LIVE_USERNAME="${_PARAMETER#*username=}"
+			;;
+	esac
+done
+
+[ -n "${LIVE_USERNAME:-}" ] || exit 0
+
+_HOME="$(getent passwd "${LIVE_USERNAME}" | cut -d: -f6)"
+[ -n "${_HOME}" ] && [ -d "${_HOME}" ] || exit 0
+
+mkdir -p "${_HOME}/.config"
+
+# 1. Direct the Welcome Center to show the Live Installer onboarding screen
+cat > "${_HOME}/.config/plasma-welcomerc" << EOF
+[General]
+LiveEnvironment=true
+LiveInstaller=calamares-install-blankon
+EOF
+
+# 2. Disable KWallet prompt popups in the live session
+cat > "${_HOME}/.config/kwalletrc" << EOF
+[Wallet]
+Enabled=false
+EOF
+
+# 3. Disable Baloo file indexing to save memory & disk I/O in the live session
+cat > "${_HOME}/.config/baloofilerc" << EOF
+[Basic Settings]
+Indexing-Enabled=false
+EOF
+
+# 4. Hide the Discover update notifier inside the live session
+mkdir -p "${_HOME}/.config/autostart"
+cat > "${_HOME}/.config/autostart/org.kde.discover.notifier.desktop" << EOF
+[Desktop Entry]
+Hidden=true
+EOF
+
+# Apply correct ownership for the live user
+chown -R "${LIVE_USERNAME}:" "${_HOME}/.config"

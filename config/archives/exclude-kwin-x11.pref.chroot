@@ -1,0 +1,4 @@
+# Pin kwin-x11 to -1 to enforce Wayland-only desktop.
+Package: kwin-x11
+Pin: version *
+Pin-Priority: -1

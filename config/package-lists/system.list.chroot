@@ -19,3 +19,4 @@ systemd-zram-generator
 earlyoom
 systemd-timesyncd
 polkit-kde-agent-1
+wsdd

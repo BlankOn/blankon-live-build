@@ -1,0 +1,5 @@
+[KDE]
+LookAndFeelPackage=org.blankon.desktop
+
+[General]
+BrowserApplication=firefox.desktop
