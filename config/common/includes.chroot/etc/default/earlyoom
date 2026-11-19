@@ -1,0 +1,19 @@
+# Default settings for earlyoom. This file is sourced by /bin/sh from
+# /etc/init.d/earlyoom or by systemd from earlyoom.service.
+
+# Options to pass to earlyoom
+#
+# Thresholds are left at earlyoom's own defaults (10% free memory and 10%
+# free swap); only the choice of victim is tuned here.
+#
+# --avoid covers the processes whose death takes the whole session with it,
+# and calamares, so a low-memory moment during an install cannot kill the
+# installer halfway through writing a partition table.
+#
+# --prefer covers browser content processes, which are usually what actually
+# exhausted memory and are the cheapest thing to lose: the browser notices
+# the tab died and offers to reload it. The odd-looking names are truncated
+# on purpose -- earlyoom matches against /proc/PID/comm, which the kernel
+# caps at 15 characters, so Firefox's "Isolated Web Content" appears there
+# as "Isolated Web Co".
+EARLYOOM_ARGS="-r 3600 --avoid '^(systemd|gnome-shell|gdm3|Xorg|Xwayland|dbus-daemon|NetworkManager|calamares|sshd)$' --prefer '^(Web Content|Isolated Web Co|Isolated Servic|firefox|chrome|chromium|thunderbird)$'"

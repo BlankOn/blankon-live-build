@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+# Compile GSettings schemas to apply overrides.
+
+if [ -d /usr/share/glib-2.0/schemas ]; then
+	glib-compile-schemas /usr/share/glib-2.0/schemas
+fi

@@ -1,0 +1,68 @@
+#!/bin/sh
+set -e
+
+. config/includes.chroot/etc/blankon/archive.conf
+
+VARIANT=$(cat variant)
+case "$VARIANT" in
+  ''|*[!a-z0-9-]*)
+    echo "Error: invalid variant: $VARIANT" >&2
+    exit 1
+    ;;
+esac
+
+lb config noauto \
+  --architectures amd64 \
+  --distribution "$ARCHIVE_SUITE" \
+  --parent-distribution "$ARCHIVE_SUITE" \
+  --archive-areas "main extras restricted restricted-firmware" \
+  --parent-archive-areas "main restricted extras restricted-firmware" \
+  --mirror-bootstrap "$ARCHIVE_URI" \
+  --parent-mirror-bootstrap "$ARCHIVE_URI" \
+  --mirror-chroot "$ARCHIVE_URI" \
+  --parent-mirror-chroot "$ARCHIVE_URI" \
+  --mirror-chroot-security "$ARCHIVE_URI" \
+  --parent-mirror-chroot-security "$ARCHIVE_URI" \
+  --mirror-binary "$ARCHIVE_URI" \
+  --parent-mirror-binary "$ARCHIVE_URI" \
+  --mirror-binary-security "$ARCHIVE_URI" \
+  --parent-mirror-binary-security "$ARCHIVE_URI" \
+  --mirror-debian-installer "$ARCHIVE_URI" \
+  --parent-mirror-debian-installer "$ARCHIVE_URI" \
+  --apt-indices false \
+  --apt-recommends true \
+  --apt-secure true \
+  --apt-source-archives true \
+  --cache true \
+  --cache-indices false \
+  --cache-packages true \
+  --cache-stages bootstrap \
+  --debootstrap-options "--keyring=/usr/share/keyrings/blankon-archive-keyring.gpg" \
+  --debootstrap-script sid \
+  --mode blankon \
+  --system live \
+  --image-name "blankon-live-image-$VARIANT" \
+  --binary-image iso-hybrid \
+  --binary-filesystem fat32 \
+  --bootappend-live "boot=live components quiet splash username=blankon hostname=blankon user-fullname=BlankOn nottyautologin" \
+  --bootappend-live-failsafe "boot=live components memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788" \
+  --bootloaders "syslinux grub-efi" \
+  --checksums sha256 \
+  --compression xz \
+  --debian-installer none \
+  --firmware-binary true \
+  --firmware-chroot true \
+  --iso-application "BlankOn Live" \
+  --iso-publisher "BlankOn Revival Project; https://blankon.github.io" \
+  --iso-volume "BlankOn ${ARCHIVE_SUITE}" \
+  --keyring-packages blankon-keyring \
+  --linux-flavours amd64 \
+  --linux-packages linux-image \
+  --memtest none \
+  --security false \
+  --updates false \
+  --backports false \
+  --source false \
+  --uefi-secure-boot disable \
+  --win32-loader false \
+  "$@"

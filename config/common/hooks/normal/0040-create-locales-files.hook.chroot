@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+cat > /etc/default/locale <<'LOCALE'
+LANG=id_ID.UTF-8
+LANGUAGE=id_ID:id
+
+LOCALE
