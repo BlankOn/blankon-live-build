@@ -1,0 +1,33 @@
+#!/bin/sh
+set -e
+
+# Ensure proper permissions on BlankOn Plasma branding assets
+for dir in \
+    /usr/share/wallpapers/sinambung \
+    /usr/share/plasma/look-and-feel/org.blankon.desktop \
+    /usr/share/icons/breeze/places \
+    /usr/share/icons/breeze-dark/places \
+    /usr/share/icons/hicolor
+do
+    if [ -d "$dir" ]; then
+        find "$dir" -type d -exec chmod 0755 {} +
+        find "$dir" -type f -exec chmod 0644 {} +
+    fi
+done
+
+# Configure lock screen wallpaper to match BlankOn Sinambung
+mkdir -p /etc/xdg
+cat > /etc/xdg/kscreenlockerrc << 'EOF'
+[Greeter]
+WallpaperPlugin=org.kde.image
+
+[Greeter][Wallpaper][org.kde.image][General]
+Image=file:///usr/share/wallpapers/sinambung/
+EOF
+
+# Refresh icon caches so Plasma picks up the BlankOn start-here icons
+for theme in breeze breeze-dark hicolor; do
+    if [ -f "/usr/share/icons/${theme}/index.theme" ] && command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        gtk-update-icon-cache -f -t "/usr/share/icons/${theme}" || true
+    fi
+done

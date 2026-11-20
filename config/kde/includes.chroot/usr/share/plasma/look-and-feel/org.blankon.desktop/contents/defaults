@@ -11,7 +11,7 @@ Theme=breeze
 name=breeze-dark
 
 [Wallpaper]
-Image=sinambung
+Image=file:///usr/share/wallpapers/sinambung/
 
 [kcminputrc][Mouse]
 cursorTheme=breeze_cursors

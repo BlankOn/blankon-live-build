@@ -7,5 +7,6 @@ htop
 git
 netcat-openbsd
 openssh-client
+fastfetch
 flatpak
 plasma-discover-backend-flatpak

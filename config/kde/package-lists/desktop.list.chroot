@@ -6,5 +6,7 @@ task-indonesian-desktop
 libreoffice
 libreoffice-kf6
 virtualbox-guest-x11
+open-vm-tools
+open-vm-tools-desktop
 elisa
 vlc
