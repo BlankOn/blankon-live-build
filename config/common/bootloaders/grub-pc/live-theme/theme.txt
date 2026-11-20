@@ -1,4 +1,4 @@
-desktop-image: "../splash.png"
+desktop-image: "/isolinux/splash.png"
 title-color: "#ffffff"
 title-font: "Unifont Regular 16"
 title-text: "Live Boot Menu with GRUB"
