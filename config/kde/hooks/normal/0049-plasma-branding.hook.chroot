@@ -15,6 +15,10 @@ do
     fi
 done
 
+if [ -f /usr/share/sddm/themes/breeze/theme.conf.user ]; then
+    chmod 0644 /usr/share/sddm/themes/breeze/theme.conf.user
+fi
+
 # Configure lock screen wallpaper to match BlankOn Sinambung
 mkdir -p /etc/xdg
 cat > /etc/xdg/kscreenlockerrc << 'EOF'
