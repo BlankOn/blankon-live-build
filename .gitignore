@@ -26,3 +26,4 @@ wget-log*
 .env
 .DS_Store
 *~
+blankon-live-image-kde-amd64.hybrid.iso
