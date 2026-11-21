@@ -22,15 +22,21 @@ MONITORS=$(
     awk '$2 == "connected" { print $1 }'
 )
 
-# Fallback for systems where monitor detection fails.
-[ -n "$MONITORS" ] || MONITORS="Virtual-1"
+# Do not apply a VM-specific fallback on unknown systems.
+[ -n "$MONITORS" ] || exit 0
 
 for MONITOR in $MONITORS; do
     BASE="/backdrop/screen0/monitor${MONITOR}/workspace0"
 
-    xfconf-query -c "$CHANNEL" \
-        -p "$BASE/last-image" --create \
-        -t string -s "$WALLPAPER"
+    CURRENT=$(xfconf-query -c "$CHANNEL" \
+        -p "$BASE/last-image" 2>/dev/null || true)
+
+    # Set default wallpaper only when no user selection exists.
+    if [ -z "$CURRENT" ]; then
+        xfconf-query -c "$CHANNEL" \
+            -p "$BASE/last-image" --create \
+            -t string -s "$WALLPAPER"
+    fi
 done
 
 xfdesktop --reload
