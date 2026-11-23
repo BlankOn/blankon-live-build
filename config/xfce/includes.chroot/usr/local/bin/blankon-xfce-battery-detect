@@ -1,0 +1,180 @@
+
+#!/bin/bash
+set -euo pipefail
+
+CHANNEL="xfce4-panel"
+STATE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/blankon-xfce"
+STATE_FILE="$STATE_DIR/battery-panel-state"
+
+log() {
+    echo "[BlankOn Battery] $*"
+}
+
+has_battery() {
+    local device
+
+    for device in /sys/class/power_supply/*; do
+        [[ -f "$device/type" ]] || continue
+
+        if [[ "$(cat "$device/type")" == "Battery" ]]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+get_battery_plugins() {
+    local property plugin_id value
+
+    while IFS= read -r property; do
+        [[ "$property" =~ ^/plugins/plugin-([0-9]+)$ ]] || continue
+
+        plugin_id="${BASH_REMATCH[1]}"
+        value=$(xfconf-query -c "$CHANNEL" -p "$property" 2>/dev/null || true)
+
+        if [[ "$value" == "battery" ]]; then
+            echo "$plugin_id"
+        fi
+    done < <(xfconf-query -c "$CHANNEL" -l)
+}
+
+get_panels() {
+    xfconf-query -c "$CHANNEL" -l |
+        grep -E '^/panels/panel-[0-9]+/plugin-ids$' || true
+}
+
+get_ids() {
+    xfconf-query -c "$CHANNEL" -p "$1" -a 2>/dev/null |
+        awk '/^[[:space:]]*[0-9]+[[:space:]]*$/ {
+            gsub(/[[:space:]]/, "")
+            print
+        }'
+}
+
+set_ids() {
+    local property="$1"
+    shift
+
+    local args=(-c "$CHANNEL" -p "$property" -a)
+    local id
+
+    for id in "$@"; do
+        args+=(-t int -s "$id")
+    done
+
+    xfconf-query "${args[@]}"
+}
+
+save_state() {
+    mkdir -p "$STATE_DIR"
+    chmod 700 "$STATE_DIR"
+
+    local temp
+    temp=$(mktemp "$STATE_DIR/.battery.XXXXXX")
+
+    printf '%s\n' "$@" > "$temp"
+    chmod 600 "$temp"
+    mv -f "$temp" "$STATE_FILE"
+}
+
+hide_battery() {
+    local plugin_id panel ids
+    local -a entries=()
+
+    for plugin_id in "${PLUGIN_IDS[@]}"; do
+        while IFS= read -r panel; do
+            [[ -n "$panel" ]] || continue
+
+            mapfile -t ids < <(get_ids "$panel")
+
+            local index=-1
+            for i in "${!ids[@]}"; do
+                if [[ "${ids[$i]}" == "$plugin_id" ]]; then
+                    index="$i"
+                    break
+                fi
+            done
+
+            (( index >= 0 )) || continue
+
+            entries+=("$plugin_id|$panel|$index")
+
+            local -a new_ids=()
+            for id in "${ids[@]}"; do
+                [[ "$id" == "$plugin_id" ]] || new_ids+=("$id")
+            done
+
+            ((${#new_ids[@]} > 0)) || {
+                log "Refusing to empty panel: $panel"
+                continue
+            }
+
+            set_ids "$panel" "${new_ids[@]}"
+            log "Hidden plugin $plugin_id from $panel"
+
+        done < <(get_panels)
+    done
+
+    if [[ ${#entries[@]} -gt 0 ]]; then
+        save_state "${entries[@]}"
+    fi
+}
+
+restore_battery() {
+    [[ -f "$STATE_FILE" ]] || {
+        log "No saved panel position; nothing to restore"
+        return
+    }
+
+    local plugin_id panel index
+    local -a ids new_ids
+
+    while IFS='|' read -r plugin_id panel index; do
+        [[ -n "$plugin_id" && -n "$panel" ]] || continue
+
+        mapfile -t ids < <(get_ids "$panel")
+
+        local found=0
+        for id in "${ids[@]}"; do
+            [[ "$id" == "$plugin_id" ]] && found=1
+        done
+
+        (( found == 0 )) || continue
+
+        (( index <= ${#ids[@]} )) || index=${#ids[@]}
+
+        new_ids=("${ids[@]:0:index}" "$plugin_id" "${ids[@]:index}")
+
+        set_ids "$panel" "${new_ids[@]}"
+        log "Restored plugin $plugin_id to $panel"
+
+    done < "$STATE_FILE"
+}
+
+# Wait for XFCE panel configuration.
+for attempt in {1..30}; do
+    if xfconf-query -c "$CHANNEL" -l >/dev/null 2>&1 &&
+       [[ -n "$(get_panels)" ]]; then
+        break
+    fi
+    sleep 1
+done
+
+mapfile -t PLUGIN_IDS < <(get_battery_plugins)
+
+if ((${#PLUGIN_IDS[@]} == 0)); then
+    log "No battery plugin found"
+    exit 0
+fi
+
+if has_battery; then
+    log "Battery detected"
+    restore_battery
+else
+    log "No battery detected"
+    hide_battery
+fi
+
+xfce4-panel -r
+log "Detection completed"
