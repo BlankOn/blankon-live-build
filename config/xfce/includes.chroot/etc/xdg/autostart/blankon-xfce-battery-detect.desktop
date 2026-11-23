@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=BlankOn XFCE Battery Detection
+Comment=Automatically detect battery hardware
+Exec=/bin/bash /usr/local/bin/blankon-xfce-battery-detect
+Terminal=false
+OnlyShowIn=XFCE;
+NoDisplay=true
