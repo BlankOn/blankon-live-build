@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=BlankOn XFCE Bluetooth Tray
+Comment=Start Blueman system tray icon
+TryExec=blueman-applet
+Exec=sh -c 'pkill -TERM -x blueman-applet 2>/dev/null; sleep 1; blueman-applet &'
+Terminal=false
+OnlyShowIn=XFCE;
+NoDisplay=true
