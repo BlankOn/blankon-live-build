@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -euo pipefail
+
+ICON_DIR="/usr/share/icons"
+
+echo "[BlankOn XFCE] Updating icon theme caches..."
+
+# Ensure all Papirus variants are installed.
+for theme in Papirus Papirus-Dark Papirus-Light; do
+    if [ ! -f "$ICON_DIR/$theme/index.theme" ]; then
+        echo "[ERROR] Missing icon theme: $theme" >&2
+        exit 1
+    fi
+done
+
+# Update cache for every valid icon theme.
+for theme_dir in "$ICON_DIR"/*; do
+    [ -d "$theme_dir" ] || continue
+    [ -f "$theme_dir/index.theme" ] || continue
+
+    theme_name="${theme_dir##*/}"
+
+    echo "[ICON CACHE] $theme_name"
+
+    if ! gtk-update-icon-cache -f -t "$theme_dir"; then
+        case "$theme_name" in
+            Papirus|Papirus-Dark|Papirus-Light)
+                echo "[ERROR] Failed to update $theme_name" >&2
+                exit 1
+                ;;
+            *)
+                echo "[WARNING] Could not update $theme_name"
+                ;;
+        esac
+    fi
+done
+
+echo "[BlankOn XFCE] Icon theme cache update completed."
