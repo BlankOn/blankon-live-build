@@ -1,39 +1,62 @@
 #!/bin/bash
-
-set -euo pipefail
+set -Eeuo pipefail
 
 ICON_DIR="/usr/share/icons"
+LOG="/var/log/blankon-icon-cache.log"
 
-echo "[BlankOn XFCE] Updating icon theme caches..."
+exec > >(tee -a "$LOG") 2>&1
 
-# Ensure all Papirus variants are installed.
+echo "=========================================="
+echo "[BlankOn XFCE] Icon cache generation"
+echo "Date: $(date)"
+echo "=========================================="
+
+# Pastikan generator cache tersedia
+if ! command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    echo "[ERROR] gtk-update-icon-cache not found."
+    echo "[ERROR] Check package: libgtk-3-bin"
+    exit 1
+fi
+
+# Pastikan Papirus tersedia
 for theme in Papirus Papirus-Dark Papirus-Light; do
     if [ ! -f "$ICON_DIR/$theme/index.theme" ]; then
-        echo "[ERROR] Missing icon theme: $theme" >&2
+        echo "[ERROR] Missing $theme/index.theme"
         exit 1
     fi
 done
 
-# Update cache for every valid icon theme.
+# Generate cache seluruh icon theme yang memiliki index.theme
 for theme_dir in "$ICON_DIR"/*; do
     [ -d "$theme_dir" ] || continue
     [ -f "$theme_dir/index.theme" ] || continue
 
-    theme_name="${theme_dir##*/}"
+    theme="${theme_dir##*/}"
 
-    echo "[ICON CACHE] $theme_name"
+    echo "[CACHE] Processing $theme"
 
-    if ! gtk-update-icon-cache -f -t "$theme_dir"; then
-        case "$theme_name" in
+    if gtk-update-icon-cache --force --quiet "$theme_dir"; then
+        echo "[OK] $theme"
+    else
+        echo "[WARNING] Failed: $theme"
+
+        case "$theme" in
             Papirus|Papirus-Dark|Papirus-Light)
-                echo "[ERROR] Failed to update $theme_name" >&2
+                echo "[ERROR] Required Papirus cache generation failed."
                 exit 1
-                ;;
-            *)
-                echo "[WARNING] Could not update $theme_name"
                 ;;
         esac
     fi
 done
 
-echo "[BlankOn XFCE] Icon theme cache update completed."
+# Verifikasi cache Papirus
+for theme in Papirus Papirus-Dark Papirus-Light; do
+    if [ ! -s "$ICON_DIR/$theme/icon-theme.cache" ]; then
+        echo "[ERROR] Cache missing: $theme"
+        exit 1
+    fi
+
+    echo "[VERIFIED] $theme/icon-theme.cache"
+done
+
+echo "[SUCCESS] Icon cache generation completed."
