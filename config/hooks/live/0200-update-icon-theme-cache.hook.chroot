@@ -6,57 +6,56 @@ LOG="/var/log/blankon-icon-cache.log"
 
 exec > >(tee -a "$LOG") 2>&1
 
-echo "=========================================="
-echo "[BlankOn XFCE] Icon cache generation"
+echo "========================================"
+echo "[BlankOn XFCE] Automatic Icon Cache"
 echo "Date: $(date)"
-echo "=========================================="
+echo "========================================"
 
-# Pastikan generator cache tersedia
 if ! command -v gtk-update-icon-cache >/dev/null 2>&1; then
     echo "[ERROR] gtk-update-icon-cache not found."
-    echo "[ERROR] Check package: libgtk-3-bin"
     exit 1
 fi
 
-# Pastikan Papirus tersedia
-for theme in Papirus Papirus-Dark Papirus-Light; do
-    if [ ! -f "$ICON_DIR/$theme/index.theme" ]; then
-        echo "[ERROR] Missing $theme/index.theme"
-        exit 1
-    fi
-done
+SUCCESS=0
+FAILED=0
+SKIPPED=0
 
-# Generate cache seluruh icon theme yang memiliki index.theme
 for theme_dir in "$ICON_DIR"/*; do
     [ -d "$theme_dir" ] || continue
-    [ -f "$theme_dir/index.theme" ] || continue
 
     theme="${theme_dir##*/}"
 
-    echo "[CACHE] Processing $theme"
+    if [ ! -f "$theme_dir/index.theme" ]; then
+        echo "[SKIP] $theme (index.theme missing)"
+        SKIPPED=$((SKIPPED + 1))
+        continue
+    fi
 
-    if gtk-update-icon-cache --force --quiet "$theme_dir"; then
-        echo "[OK] $theme"
+    echo "[CACHE] $theme"
+
+    if gtk-update-icon-cache --force --quiet --include-image-data "$theme_dir"; then
+        if [ -s "$theme_dir/icon-theme.cache" ]; then
+            echo "[OK] $theme"
+            SUCCESS=$((SUCCESS + 1))
+        else
+            echo "[FAILED] $theme (cache not generated)"
+            FAILED=$((FAILED + 1))
+        fi
     else
-        echo "[WARNING] Failed: $theme"
-
-        case "$theme" in
-            Papirus|Papirus-Dark|Papirus-Light)
-                echo "[ERROR] Required Papirus cache generation failed."
-                exit 1
-                ;;
-        esac
+        echo "[FAILED] $theme (generator error)"
+        FAILED=$((FAILED + 1))
     fi
 done
 
-# Verifikasi cache Papirus
-for theme in Papirus Papirus-Dark Papirus-Light; do
-    if [ ! -s "$ICON_DIR/$theme/icon-theme.cache" ]; then
-        echo "[ERROR] Cache missing: $theme"
-        exit 1
-    fi
+echo "========================================"
+echo "Successful: $SUCCESS"
+echo "Failed:     $FAILED"
+echo "Skipped:    $SKIPPED"
+echo "========================================"
 
-    echo "[VERIFIED] $theme/icon-theme.cache"
-done
+if [ "$FAILED" -gt 0 ]; then
+    echo "[ERROR] Some icon caches failed."
+    exit 1
+fi
 
-echo "[SUCCESS] Icon cache generation completed."
+echo "[SUCCESS] All icon caches generated."
