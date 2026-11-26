@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+ICON_DIR="/usr/share/icons"
+
+echo "[BlankOn XFCE] Generating Papirus icon caches..."
+
+for theme in Papirus Papirus-Dark Papirus-Light; do
+    theme_dir="${ICON_DIR}/${theme}"
+
+    if [ ! -f "${theme_dir}/index.theme" ]; then
+        echo "[ERROR] Missing icon theme: ${theme}" >&2
+        exit 1
+    fi
+
+    echo "[ICON CACHE] ${theme}"
+
+    gtk-update-icon-cache -f -t "${theme_dir}"
+
+    if [ ! -s "${theme_dir}/icon-theme.cache" ]; then
+        echo "[ERROR] Cache generation failed: ${theme}" >&2
+        exit 1
+    fi
+done
+
+echo "[BlankOn XFCE] All Papirus icon caches generated successfully."
