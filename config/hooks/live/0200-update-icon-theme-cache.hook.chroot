@@ -11,51 +11,54 @@ echo "[BlankOn XFCE] Automatic Icon Cache"
 echo "Date: $(date)"
 echo "========================================"
 
-if ! command -v gtk-update-icon-cache >/dev/null 2>&1; then
-    echo "[ERROR] gtk-update-icon-cache not found."
+command -v gtk-update-icon-cache >/dev/null 2>&1 || {
+    echo "[ERROR] gtk-update-icon-cache not found"
     exit 1
-fi
+}
 
 SUCCESS=0
-FAILED=0
 SKIPPED=0
+FAILED=0
 
 for theme_dir in "$ICON_DIR"/*; do
     [ -d "$theme_dir" ] || continue
+    [ -f "$theme_dir/index.theme" ] || continue
 
     theme="${theme_dir##*/}"
 
-    if [ ! -f "$theme_dir/index.theme" ]; then
-        echo "[SKIP] $theme (index.theme missing)"
+    # Baca daftar direktori ikon dari index.theme
+    directories=$(sed -n '/^\[Icon Theme\]/,/^\[/p' \
+        "$theme_dir/index.theme" |
+        sed -n 's/^Directories=//p' |
+        head -n 1)
+
+    # Lewati theme deprecated/alias tanpa direktori ikon
+    if [ -z "$directories" ]; then
+        echo "[SKIP] $theme (no icon directories)"
         SKIPPED=$((SKIPPED + 1))
         continue
     fi
 
     echo "[CACHE] $theme"
 
-    if gtk-update-icon-cache --force --quiet --include-image-data "$theme_dir"; then
-        if [ -s "$theme_dir/icon-theme.cache" ]; then
-            echo "[OK] $theme"
-            SUCCESS=$((SUCCESS + 1))
-        else
-            echo "[FAILED] $theme (cache not generated)"
-            FAILED=$((FAILED + 1))
-        fi
+    if gtk-update-icon-cache --force --quiet "$theme_dir" &&
+       [ -s "$theme_dir/icon-theme.cache" ]; then
+        echo "[OK] $theme"
+        SUCCESS=$((SUCCESS + 1))
     else
-        echo "[FAILED] $theme (generator error)"
+        echo "[FAILED] $theme"
         FAILED=$((FAILED + 1))
     fi
 done
 
 echo "========================================"
 echo "Successful: $SUCCESS"
-echo "Failed:     $FAILED"
 echo "Skipped:    $SKIPPED"
+echo "Failed:     $FAILED"
 echo "========================================"
 
 if [ "$FAILED" -gt 0 ]; then
-    echo "[ERROR] Some icon caches failed."
     exit 1
 fi
 
-echo "[SUCCESS] All icon caches generated."
+echo "[SUCCESS] Icon cache generation completed."
