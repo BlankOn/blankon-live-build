@@ -1,6 +1,7 @@
 desktop-image: "/isolinux/splash.png"
 title-color: "#ffffff"
 title-font: "Unifont Regular 16"
+title-text: ""
 message-font: "Unifont Regular 16"
 terminal-font: "Unifont Regular 16"
 
