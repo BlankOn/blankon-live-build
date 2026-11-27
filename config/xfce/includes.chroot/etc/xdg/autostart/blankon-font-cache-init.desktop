@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=BlankOn Font Cache Initialization
+Comment=Initialize custom user font cache
+Exec=/usr/local/bin/blankon-font-cache-init
+Terminal=false
+NoDisplay=true
+OnlyShowIn=XFCE;

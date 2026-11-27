@@ -1,0 +1,9 @@
+#applicationmenu-button label {
+    font-family: "Cantarell", sans-serif;
+    font-weight: bold;
+    font-size: 10pt;
+    letter-spacing: -1.5px;
+
+    margin-left: 0px;
+    margin-right: 1px;
+}

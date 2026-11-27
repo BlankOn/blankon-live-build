@@ -1,0 +1,17 @@
+#!/bin/sh
+
+FONT_DIR="$HOME/.local/share/fonts"
+CACHE_MARKER="$HOME/.cache/blankon-font-cache-initialized"
+
+[ -d "$FONT_DIR" ] || exit 0
+[ -f "$CACHE_MARKER" ] && exit 0
+
+mkdir -p "$HOME/.cache"
+
+fc-cache -f "$FONT_DIR"
+
+if [ $? -eq 0 ]; then
+    touch "$CACHE_MARKER"
+fi
+
+exit 0
